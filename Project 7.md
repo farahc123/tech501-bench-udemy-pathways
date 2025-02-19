@@ -6,14 +6,20 @@
     - [What I learnt](#what-i-learnt)
   - [Part 1b — provisioning the app instance](#part-1b--provisioning-the-app-instance)
     - [What I learnt](#what-i-learnt-1)
+  - [Part 2a — creating and testing an image of the above DB EC2 instance](#part-2a--creating-and-testing-an-image-of-the-above-db-ec2-instance)
+    - [What I learnt](#what-i-learnt-2)
+  - [Part 2b — creating and testing an image of the above app EC2 instance](#part-2b--creating-and-testing-an-image-of-the-above-app-ec2-instance)
 
 ## Task
 
 - [Task instructions here](https://testingcircle.sharepoint.com/:w:/r/sites/SpartaGlobalHO/_layouts/15/Doc.aspx?sourcedoc=%7BBA72D0CB-2B42-4267-87D0-FA9D48AFDC01%7D&file=DevOps%20Project%207%20Brief%20-%20Use%20Scripting%20and%20User%20Data%20for%202-Tier%20App%20Deployment.docx&action=default&mobileredirect=true)
-1. Part 1:
-  1. develop script to provision the DB VM/instance
-  2. develop script to provision the Sparta test app VM/instance
-2. Part 2
+1. Step 1:
+  1. develop script to provision the DB VM/instance via User Data
+  2. develop script to provision the Sparta test app VM/instance via User Data
+2. Step 2:
+   1. Create and test an image of my DB EC2
+   2. Develop a *run-app-only.sh* script just to run the app on an app EC2
+   3. Create and test an image of my app EC2 using the *run-app-only.sh* script
 3.  
 
 ## Part 1a — provisioning the DB instance
@@ -54,7 +60,7 @@
   - **Name**: *tech501-farah-udemy-project7-app-from-script-ec2*
   - **Security rules**:
     - allowed SSH (this is done **by default**)
-    - **added a new rule** to allow inbound HTTP access (i.e. port 80) and inbound access on port 3000 (for reverse proxy)
+    - **added new rules** to allow inbound HTTP access (i.e. port 80) and inbound access on port 3000 (for reverse proxy)
 ![alt text](image-1.png)
   - **Advanced details**:
     - I scrolled down to **User data,** then pasted in the contents of [this script file](prov-app.sh) which includes the `export` command containing the private IP of the above created DB EC2
@@ -80,3 +86,51 @@
 - I needed to change ownership of the newly git-cloned repo folder because otherwise it wouldn't let me run `npm install`
 - I needed to add an `npm audit fix` command to my script to remove some errors that I couldn't get past otherwise
 - I needed to add a `node seeds/seed.js` command in case my */posts* page hadn't been seeded properly
+
+## Part 2a — creating and testing an image of the above DB EC2 instance
+
+1. Log out of DB EC2 if logged in
+2. Create an image from the EC2:
+   - **Name**: *tech501-farah-udemy-db-from-script*
+![alt text](image-10.png)
+1. Check the image shows as available on the AMI dashboard
+![alt text](image-11.png)
+1. Create EC2 from image:
+   1. **Name**: *tech501-farah-udemy-project-7-db-from-image*
+   2. **Image**: should have already selected *tech501-farah-udemy-db-from-script*
+   3. **Instance type**: t3.micro
+   4. **Key pair**: mine
+   5. **Network**: default VPC
+   6. **Security rules**:
+    - allowed SSH (this is done **by default**)
+    - **added a new rule** to allow traffic on port 27017 (for mongoDB) from all sources
+   7. Logged into the EC2 as Ubuntu and ran `sudo systemctl status mongod`
+![alt text](image-12.png)
+
+
+### What I learnt
+
+- When logging into the EC2 created from my image, I needed to specify that I wanted to login as the `ubuntu` user like this:
+`ssh -i "tech501-farah-aws-key.pem" ubuntu@ec2-3-249-254-177.eu-west-1.compute.amazonaws.com`
+  - Otherwise I got this error
+![alt text](image-13.png)
+
+
+## Part 2b — creating and testing an image of the above app EC2 instance
+
+1. Log out of app EC2 if logged in
+2. Create an image from the EC2:
+   - **Name**: *tech501-farah-udemy-app-from-script*
+![alt text](image-8.png)
+1. Check the image shows as available on the AMI dashboard
+![alt text](image-14.png)
+1. Create EC2 from image:
+   1. **Name**: *tech501-farah-udemy-project-7-app-from-image*
+   2. **Image**: should have already selected *tech501-farah-udemy-app-from-script*
+   3. **Instance type**: t3.micro
+   4. **Key pair**: mine
+   5. **Network**: default VPC
+   6. **Security rules**:
+    - allowed SSH (this is done **by default**)
+    - **added new rules** to allow inbound HTTP access (i.e. port 80) and inbound access from anywhere on port 3000 (for reverse proxy)
+   7. In **User data**, added *run-app-only.sh* script [found here](run-app-only.sh)

@@ -36,8 +36,8 @@ sudo git clone https://github.com/farahc123/tech501-sparta-app.git /repo
 # starting the app on first run using pm2
 cd /repo/nodejs20-sparta-test-app/app
 sudo chown -R $(whoami) /repo/nodejs20-sparta-test-app
-npm install
-npm audit fix
+sudo npm install
+sudo npm audit fix
 sudo npm install pm2 -g
 export DB_HOST=mongodb://172.31.51.68:27017/posts
 node seeds/seed.js
