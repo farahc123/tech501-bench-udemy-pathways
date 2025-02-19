@@ -32,9 +32,15 @@
   - **Advanced details**:
     - I scrolled down to **User data,** then pasted in the contents of [this script file](prov-db.sh)
 3. **Launched instance**
-4. Tested with `sudo systemctl status mongod`:
+4. Waited 5 minutes
+5. Tested with `sudo systemctl status mongod`:
  ![alt text](image.png)
- 
+6. Tested the idempotency of my script by running it again
+   - as the downgraded message shows, the script ran the `upgrade` command (which upgraded mongodb) and then downgraded my version of mongodb to the version specified in my command
+![alt text](image-6.png)
+   - and this shows that mongodb was restarted afterwards
+![alt text](image-7.png)  
+
 ### What I learnt
 
 - the `sed` command syntax for replacing a string in a given file is:
@@ -58,6 +64,14 @@
 ![alt text](image-2.png)
 6. Tested my posts page:
 ![alt text](image-3.png)
+7. Tested the idempotency of my script by running it twice when the app was already running
+![alt text](image-5.png)
+   - and it started the app again 
+![alt text](image-9.png)
+![alt text](image-8.png)
+
+
+
 
 ### What I learnt
 

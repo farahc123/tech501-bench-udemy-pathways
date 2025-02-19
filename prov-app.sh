@@ -39,7 +39,7 @@ sudo chown -R $(whoami) /repo/nodejs20-sparta-test-app
 npm install
 npm audit fix
 sudo npm install pm2 -g
-export DB_HOST=mongodb://172.31.56.225:27017/posts
+export DB_HOST=mongodb://172.31.51.68:27017/posts
 node seeds/seed.js
 pm2 start app.js
 
