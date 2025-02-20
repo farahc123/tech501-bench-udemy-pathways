@@ -1,16 +1,27 @@
 #!/bin/bash
 
-# navigating into app folder
+LOG_FILE="/farah_running_app_only.log"
+
+# Use sudo to write to the log file
+exec > >(sudo tee -a "$LOG_FILE") 2>&1
+
+echo "Changing directory to application folder..."
 cd /repo/nodejs20-sparta-test-app/app
 
-#installing npm
+echo "Installing npm dependencies..."
 sudo npm install
 
-#export DB_HOST= correct private IP
-export DB_HOST=mongodb://172.31.60.72:27017/posts
+# Changed from export DB_HOST=mongodb://172.31.48.148:27017/posts to export DB_HOST=mongodb://10.0.3.4:27017/posts when I switched to Azure
+echo "Setting up database connection..."
+export DB_HOST=mongodb://10.0.3.4:27017/posts
 
-#seeding the database
+echo "Seeding the database..."
 node seeds/seed.js
 
-#starting the app
+echo "Stopping the application using PM2..."
+pm2 delete app.js
+
+echo "Starting the application using PM2..."
 pm2 start app.js
+
+echo "Script execution completed. Logs stored in $LOG_FILE"

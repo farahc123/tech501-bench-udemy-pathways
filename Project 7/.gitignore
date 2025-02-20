@@ -1,0 +1,11 @@
+# doesn't contain sensitive files
+# but contains provider plugins, module cache
+# so we're excluding it fromm GitHub to avoid bloating the repo
+.terraform/
+
+# most important files to secure as they contain credentials used by Terraform
+terraform.tfstate
+terraform.tfstate.backup
+
+# excluding variables containing sensitive information
+variable.tf
