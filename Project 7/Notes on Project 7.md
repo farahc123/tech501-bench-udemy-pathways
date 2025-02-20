@@ -22,8 +22,8 @@
 2. **Step 2**:
    1. Create and test an image of my DB EC2
    2. Develop a *run-app-only.sh* script just to run the app on an app EC2 that will be created in below step
-   3. Create and test an image of my app EC2 using the *run-app-only.sh* script
-3.  
+   3. Create and test an image of my app EC2 using the *run-app-only.sh* script in User Data
+3. Create a 4-minute video on what I did and what I learnt on this project for a non-technical stakeholder 
 
 ---
 
