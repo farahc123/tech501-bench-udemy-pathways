@@ -19,7 +19,7 @@
 
 ## GitHub repo
 
-Available here
+[**Available here**](https://github.com/farahc123/tech501-bench-udemy-pathways/tree/main/Project%207)
 
 ## Introduction to the problem
 
