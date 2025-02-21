@@ -1,6 +1,7 @@
 # Udemy Project 7
 
 - [Udemy Project 7](#udemy-project-7)
+  - [GitHub repo](#github-repo)
   - [Introduction to the problem](#introduction-to-the-problem)
   - [Diagram showing my automation workflow](#diagram-showing-my-automation-workflow)
 - [Detailed steps](#detailed-steps)
@@ -16,6 +17,10 @@
   - [Blockers](#blockers)
   - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project)
 
+## GitHub repo
+
+Available here
+
 ## Introduction to the problem
 
 - We have a test app that uses Node JS v20
@@ -28,15 +33,7 @@
 
 ## Diagram showing my automation workflow
 
-o A diagram showing your automation workflow for this project.
-
-  § At the very least, this should include manual deployment, Bash scripting, user data, and images, along with how one led to the other
-
-  § You could also include:
-
-    · how `run-app-only.sh` script fits into the picture
-
-    · how it is possible to speed up the automation process if you are limited on time (i.e. think about at which stage images could be used)
+![alt text](udemy-sparta-project-7-diagram2.drawio.png)
 
 # Detailed steps
 
