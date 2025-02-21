@@ -204,7 +204,6 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
 - Because of this, I preferred using Terraform over the cloud providers' GUIs, as I could easily build and tear down any resources with a few uses of my keyboard rather than following a ClickOps approach 
 - I preferred using Azure over AWS in general because, during testing (when I assigned a public IP to the MongoDB VM to enable manual logging in to check), I no longer had to modify the connection string used in the `export` command on the app VM as this was always the same, even on different iterations of my database VM
   - Because of this, in future, if I was creating something with **an IP address I needed to keep the same** (e.g. a VM for a Jenkins server) and I didn't have access to an Elastic IP on AWS, I would prefer to use Azure — because we discovered that AWS's changing IP address caused Jenkins to work very slowly after a reboot of the EC2 it was running on
-- 
 
 
 
