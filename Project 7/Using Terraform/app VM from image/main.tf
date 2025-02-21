@@ -79,7 +79,7 @@ resource "azurerm_virtual_machine" "tech501-farah-tf-udemy-app-from-image-vm" {
 
       # Changed from export DB_HOST=mongodb://172.31.48.148:27017/posts to export DB_HOST=mongodb://10.0.3.4:27017/posts when I switched to Azure
       echo "Setting up database connection..."
-      export DB_HOST=mongodb://10.0.3.5:27017/posts
+      export DB_HOST=mongodb://10.0.3.4:27017/posts
 
       echo "Seeding the database..."
       node seeds/seed.js
