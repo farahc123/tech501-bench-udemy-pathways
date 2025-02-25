@@ -1,0 +1,22 @@
+services:
+  app:
+    image: farahc123/sparta-app:v1
+    container_name: farah-sparta-app-container
+    environment:
+      - DB_HOST=mongodb://db:27017/posts  # MongoDB connection string
+    ports:
+      - "3000:3000"  # Exposes port 3000 for Node.js app
+    depends_on:
+      - db
+
+
+  db:
+    image: mongo:latest
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"  # Exposes port 27017 for MongoDB container
+    volumes:
+      - mongo_data:/data/db  # Persists MongoDB data in a volume
+
+volumes:
+  mongo_data:  # Defines a volume for MongoDB data
