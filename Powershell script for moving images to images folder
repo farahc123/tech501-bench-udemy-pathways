@@ -1,0 +1,17 @@
+# This script moves all PNG images in the current directory to an 'images' folder and updates the Markdown image paths accordingly
+
+$projectPath = "C:\Users\farah\OneDrive - Sparta Global\Documents\Github\tech501-bench-udemy-pathways\Project 8"
+$imagesPath = "$projectPath\images"
+
+# Creates images directory if it doesn't exist
+New-Item -ItemType Directory -Path $imagesPath -Force
+
+# Moves all PNG images into the images folder
+Get-ChildItem -Path $projectPath -Filter "*.png" | Move-Item -Destination $imagesPath
+
+# Updates image paths inside all .md files
+Get-ChildItem -Path $projectPath -Filter "*.md" | ForEach-Object {
+    (Get-Content $_.FullName) -replace '!\[(.*?)\]\((image-[0-9]+\.png)\)', '![`$1`](images/$2)' | Set-Content $_.FullName
+}
+
+Write-Host "✅ Images moved and Markdown updated successfully!"
