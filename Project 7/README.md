@@ -49,7 +49,7 @@
   - **Security rules**:
     - allowed SSH (this is done **by default**)
     - **added a new rule** to allow traffic on port 27017 (for mongoDB) from all sources
-![alt text](image-4.png)
+![`alt text`](images/image-4.png)
   - **For app VM**:
     - **VPC**: default, and default subnet
     - **AMI**: Ubuntu 22.04 LTS (HVM), SSD volume type
@@ -59,7 +59,7 @@
     - **Security rules**:
     - allowed SSH (this is done **by default**)
       - **added new rules** to allow inbound HTTP access (i.e. port 80) and inbound access on port 3000 (for reverse proxy)
-    ![alt text](image-1.png)
+    ![`alt text`](images/image-1.png)
 
 ## 1a. Developing and implementing a Bash script to provision the database VM
 
@@ -85,9 +85,9 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
  ![alt text](image.png)
 **4.** I then tested the idempotency of my script by running it again
    - as the "downgraded" message shows, the script ran the `upgrade` command (which upgraded MongoDB) and then downgraded it to the version specified in my command
-![alt text](image-6.png)
+![`alt text`](images/image-6.png)
    - and this shows that MongoDB was restarted afterwards
-![alt text](image-7.png)  
+![`alt text`](images/image-7.png)  
 
 ### What I learnt
 
@@ -116,14 +116,14 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
 ```
 
 **2.** After launching the instance, I tested that the script had worked by navigating to the public IP of this app EC2:
-![alt text](image-2.png)
+![`alt text`](images/image-2.png)
   - and its */posts* page:
-![alt text](image-3.png)
+![`alt text`](images/image-3.png)
 
 **3.** I then tested the idempotency of my script by running it twice when the app was already running
-![alt text](image-5.png)
+![`alt text`](images/image-5.png)
    - and it started the app again (note the different records, indicating that the `node seeds/seed.js` command had run successfully)
-![alt text](image-9.png)
+![`alt text`](images/image-9.png)
 
 ### What I learnt
 
@@ -140,19 +140,19 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
 
 **1.** I created images from both of the above provisioned EC2s:
    1.  **DB EC2 image name**: *tech501-farah-udemy-db-from-script*
-![alt text](image-10.png)
-![alt text](image-11.png)
+![`alt text`](images/image-10.png)
+![`alt text`](images/image-11.png)
    2. **App EC2 image name**: *tech501-farah-udemy-app-from-script*
-![alt text](image-8.png)
-![alt text](image-14.png) 
+![`alt text`](images/image-8.png)
+![`alt text`](images/image-14.png) 
 
 **2.** I then used the **Launch instance from AMI** feature to create EC2s from both of these images, using the same settings I initially created (apart from the AMI, as this is now different)
    - I didn't use scripts in the **User data field**, except a *run-app-only.sh* script [found here](run-app-only.sh) used when creating the app EC2 (this overwrites the old connection string and starts the app on this machine when it runs for the first time)
 
-**3.** I then followed this process again, and on this second run, tested that the */posts* page worked and it did ![alt text](image-22.png)
+**3.** I then followed this process again, and on this second run, tested that the */posts* page worked and it did ![`alt text`](images/image-22.png)
 **4.** I then logged out of this second app EC2, logged back in, created a local version of the *run-app-only.sh* script, ran it, and it worked perfectly (note the new records to indicate the reseeding of the database)
-![alt text](image-23.png)
-![alt text](image-22.png)
+![`alt text`](images/image-23.png)
+![`alt text`](images/image-22.png)
 
 ### What I learnt
 
@@ -169,19 +169,19 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
    - The *.tf* files used for this part can be found [here](<Using Terraform>) (with sensitive information hidden in a git-ignored variable file)
 
 **2.** VN created using this method:
-![alt text](image-27.png)
+![`alt text`](images/image-27.png)
 **3.** VMs created using this method:
-  ![alt text](image-26.png)
+  ![`alt text`](images/image-26.png)
    - Successful posts page using this method:
-  ![alt text](image-25.png)
+  ![`alt text`](images/image-25.png)
 
 **4.** I then created images of both the above VMs e.g.:
-![alt text](image-28.png)
-![alt text](image-29.png)
+![`alt text`](images/image-28.png)
+![`alt text`](images/image-29.png)
 **5.** Using Terraform, I then created VMs from both of these images (with an added *run-app-only.sh* script provided as **custom data** for the app VM):
-![alt text](image-30.png) 
+![`alt text`](images/image-30.png) 
 **6.** Finally, I tested these VMs from images by accessing the posts page:
-![alt text](image-31.png)
+![`alt text`](images/image-31.png)
 
 ### What I learnt
 
@@ -194,7 +194,7 @@ exec > >(sudo tee -a "$LOG_FILE") 2>&1
 - When logging into any of the EC2s created from my images, I needed to specify that I wanted to login as the `ubuntu` user like this:
 `ssh -i "tech501-farah-aws-key.pem" ubuntu@ec2`...
   - Otherwise I got this error
-![alt text](image-13.png)
+![`alt text`](images/image-13.png)
 - I did run into a couple of errors getting the */posts* page to load, which was because I hadn't modified the private IP in the connection string when running the `export` command, so this was easily fixed
 - In the early stages of the project, there were a couple of occasions when I was unsure if my User Data scripts were running successfully, so I modified my script files so that before a command was executed, it provided output to a log file — this way I could tell if the script was running successfully or not
 
