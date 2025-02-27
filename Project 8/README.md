@@ -269,8 +269,8 @@ ENTRYPOINT ["/start.sh"]
 4. I then SCPed this tar file to the EC2 instance using `scp -i ~/.ssh/tech501-farah-aws-key.pem sparta-app-image.tar ubuntu@ec2-52-215-19-68.eu-west-1.compute.amazonaws.com:~` ![alt text](images/image-84.png)
 5. Once this tar file was on the EC2 instance, I loaded the image from it with `docker load -i sparta-app-image.tar`
 6. I then modified my original Dockerfile to make it work with the tar file (i.e. by removing the `COPY app/ .` command; see below for explanation)
-![alt text](images/image-82.png)
-1. I replicated my original Docker Compose file ![alt text](images/image-83.png)
+![alt text](image-82.png)
+1. I replicated my original Docker Compose file ![alt text](image-83.png)
 2. I then built the image with `docker build -t sparta-app .`
 3.  I started it with `docker compose up -d`
 4.  Results: working */posts* page ![alt text](images/image-81.png)
