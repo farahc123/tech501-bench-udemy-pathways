@@ -28,13 +28,15 @@
   - [Running Sparta test app in a container and seeding the database with 3 methods](#running-sparta-test-app-in-a-container-and-seeding-the-database-with-3-methods)
     - [Docker Compose research](#docker-compose-research)
     - [Why](#why-2)
-    - [Steps](#steps)
+    - [Initial steps](#initial-steps)
+    - [Automatic method 1](#automatic-method-1)
+    - [Automatic method 2](#automatic-method-2)
     - [Blockers](#blockers-3)
     - [What I learnt](#what-i-learnt-3)
     - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project-3)
   - [Extension task: Running the containers on an EC2 instance](#extension-task-running-the-containers-on-an-ec2-instance)
     - [Why](#why-3)
-    - [Steps](#steps-1)
+    - [Steps](#steps)
     - [Blockers](#blockers-4)
     - [What I learnt](#what-i-learnt-4)
     - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project-4)
@@ -210,7 +212,7 @@ ENTRYPOINT ["/start.sh"]
 
 - To 
 
-### Steps
+### Initial steps
 
 1. Created a folder for this task (because you can only have one Dockerfile per folder) ![alt text](images/image-71.png)
 2. I created [a Dockerfile](<Docker repo/Dockerfile>) and [a Docker Compose file](<Docker repo/compose.yml>) for this task
@@ -219,14 +221,14 @@ ENTRYPOINT ["/start.sh"]
 ![`alt text`](images/image-58.png)
   - This worked: ![`alt text`](images/image-52.png)
 
-**Automatic method 1**:
+### Automatic method 1
 
 - Automatically seeding the database using one command in the Docker Compose file:
   - Compose file: ![compose](images/image-68.png)
   - Dockerfile: ![dockerfile](images/image-69.png)
   - Results: ![`results`](images/image-65.png)
 
-**Automatic method 2**:
+### Automatic method 2
 - Automatically seeding the database using a healthcheck on the MongoDB container in my Docker Compose file ([all files here](<automatic method 2 docker>)):
   ![`compose file`](images/image-61.png)
   - Dockerfile:
@@ -261,16 +263,17 @@ ENTRYPOINT ["/start.sh"]
 
 ### Steps
 
-1. After creating an EC2 instance running on Ubuntu 22.04, I had to install Docker on Ubuntu 22.04 via the CLI using these steps https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-2. I then had to add myself to the Docker group on my EC2 to avoid having to use `sudo` for every `docker` command following these steps https://docs.docker.com/engine/install/linux-postinstall/
+1. After creating an EC2 instance running on Ubuntu 22.04, I had to install Docker on Ubuntu 22.04 via the CLI using [these steps](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
+2. I then had to add myself to the Docker group on my EC2 to avoid having to use `sudo` for every `docker` command following [these steps](https://docs.docker.com/engine/install/linux-postinstall/)
 3. On my local machine, I created a ***tar*** file with `docker save -o sparta-app-image.tar project8-app-db-method2` -- this saved the Sparta test app image to a file that I could then transfer to my EC2 instance 
-4. I then SCPed this tar file to the EC2 instance using `scp -i ~/.ssh/tech501-farah-aws-key.pem sparta-app-image.tar ubuntu@ec2-18-202-23-130.eu-west-1.compute.amazonaws.com:~` ![alt text](images/image-73.png)
-5. Once this tar file was on the EC2 instance, I loaded the image from the tar file (see the output of `docker images` to confirm it's there) ![alt text](images/image-72.png)
-6. I then modified my original Dockerfile to make it work with the tar file (i.e. by removing the `COPY app/ .` command; see below for explanation) ![alt text](images/image-77.png)
-7. I replicated my original Docker Compose file ![alt text](images/image-78.png)
-8. I then built the image with `docker build -t sparta-app .` ![alt text](images/image-75.png)
-9. I started it with `docker compose up -d` ![alt text](images/image-76.png)
-10. Results: working */posts* page ![alt text](images/image-74.png)
+4. I then SCPed this tar file to the EC2 instance using `scp -i ~/.ssh/tech501-farah-aws-key.pem sparta-app-image.tar ubuntu@ec2-52-215-19-68.eu-west-1.compute.amazonaws.com:~` ![alt text](images/image-84.png)
+5. Once this tar file was on the EC2 instance, I loaded the image from it with `docker load -i sparta-app-image.tar`
+6. I then modified my original Dockerfile to make it work with the tar file (i.e. by removing the `COPY app/ .` command; see below for explanation)
+![alt text](images/image-82.png)
+1. I replicated my original Docker Compose file ![alt text](images/image-83.png)
+2. I then built the image with `docker build -t sparta-app .`
+3.  I started it with `docker compose up -d`
+4.  Results: working */posts* page ![alt text](images/image-81.png)
 
 ### Blockers
 
