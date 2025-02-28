@@ -33,6 +33,8 @@
 - [**Extension task: Running the containers on an EC2 instance**](#extension-task-running-the-containers-on-an-ec2-instance)
   - [Steps](#steps)
   - [**Blockers**](#blockers-3)
+- [**What I learnt from the project**](#what-i-learnt-from-the-project)
+- [**Benefits I personally saw from the project**](#benefits-i-personally-saw-from-the-project)
 
 ## Goal of the project
 
@@ -314,7 +316,7 @@ services:
 - I realised I had to add myself to the Docker group to give myself the correct permissions so that I didn't need to preface every `docker` command with `sudo`
 - I also realised I couldn't just reuse my original Dockerfile because I no longer needed to copy the Sparta test app folder (this was referenced in my `COPY app/ .` command) as I already had this in the tar file, so I had to edit my Compose file
 
-**# What I learnt from the project**
+# **What I learnt from the project**
 
 - How Docker containers and images work
 - That containers don't always come with the packages I expect (e.g. `sudo` and `nano`)
@@ -322,7 +324,7 @@ services:
 - About saving images to tar files and how this is helpful when transferring images to a system without internet access, sharing images outside of a registry, or for backing up
 - That, on Linux OSes, you have to add yourself to the Docker group in order to avoid having to preface every `docker` command with `sudo`
 
-**# Benefits I personally saw from the project**
+# **Benefits I personally saw from the project**
 
 - After the learning curve, using Docker seems like a much easier process than the previous methods for deployment that we used
 - On the [Sparta container task](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose), I preferred my first automatic method command as it was simpler, so I used this as the basis for the EC2 extension task

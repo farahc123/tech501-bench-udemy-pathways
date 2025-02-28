@@ -1,7 +1,7 @@
 services:
   app:
     image: farahc123/sparta-app:v1
-    container_name: farah-sparta-app-container1
+    container_name: farah-sparta-app-container2
     environment:
       - DB_HOST=mongodb://db:27017/posts  # MongoDB connection string
     ports:
