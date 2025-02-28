@@ -1,9 +1,15 @@
 # Udemy Project 8
 
 - [Udemy Project 8](#udemy-project-8)
+  - [Goal of the project](#goal-of-the-project)
   - [GitHub repo](#github-repo)
   - [Installing Docker Desktop](#installing-docker-desktop)
   - [Research on microservices, containers, and Docker](#research-on-microservices-containers-and-docker)
+    - [Virtualisation vs containerisation](#virtualisation-vs-containerisation)
+    - [Benefits of virtualisation vs containerisation](#benefits-of-virtualisation-vs-containerisation)
+  - [Microservices](#microservices)
+    - [Benefits](#benefits)
+  - [Docker](#docker)
   - [Learning to manage Docker containers locally](#learning-to-manage-docker-containers-locally)
     - [Why](#why)
     - [Run and pull my first image](#run-and-pull-my-first-image)
@@ -41,10 +47,13 @@
     - [What I learnt](#what-i-learnt-4)
     - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project-4)
 
+## Goal of the project
+
+To containerise the deployment of the Sparta test app and database using Docker and AWS.
+
 ## GitHub repo
 
 [**Available here**](https://github.com/farahc123/tech501-bench-udemy-pathways/tree/main/Project%208)
-
 
 ## Installing Docker Desktop
 
@@ -54,7 +63,137 @@
 
 ## Research on microservices, containers, and Docker
 
-- 
+Research and document...
+
+· Differences between virtualisation and containerisation
+
+o What is usually included in a container vs virtual machine?
+
+o Benefits of each, especially a virtual machine over the traditional architecture
+
+· Microservices
+
+o What are they?
+
+o How are they made possible?
+
+o Benefits
+
+· Docker
+
+o What is it
+
+o Alternatives
+
+o How it works (Docker architecture/API)
+
+o Success story using Docker
+
+### Virtualisation vs containerisation
+
+- **Virtualisation**: a technology allowing users to run several isolated VMs on one physical server/host machine
+- Downsides:
+  - heavier than containerisation because it requires a separate, full OS on each VM
+  - uses a lot of resources
+  - startup and provisioning can be slow
+- **Containerisation**: bundling (or **encapsulating**) code and all its dependencies into an **image**
+- An image is then run in instances called a **container**:  a lightweight alternative to full virtualisation that uses an abstracted OS so that it can run consistently on any machine
+- these containers operate in isolated environments, so they run independently from the infrastructrue they're deployed into
+- **Images**: pre-built packages containing everything needed to run an application, including the code, dependencies, and configuration
+
+### Benefits of virtualisation vs containerisation
+
+| \\|                                                                                                                                                                                                                      |   |
+
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
+
+| Virtualisation                                                                                                                                                                                                          |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| Containerisation                                                                                                                                                                                                        |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| Compared to traditional architecture, virtualisation reduces resource (hardware) costs because VMs can run on one physical machine and can be assigned only the computing power they actually need                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| Containers are lighter than VMs because they share the host machine's OS kernel, so they minimise resource overhead (e.g. they don't use the hypervisors that VMs do) because they don't run separate OS tasks          |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| VMs provide high availability via monitoring and scale sets (so they are also very helpful in disaster situations)                                                                                                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| Though VMs are portable between machines, containers are more so because they are also OS-agnostic (so long as the OSes support the containerisation tool, e.g. Docker) --- write once, run anywhere                    |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| VMs are very scalable                                                                                                                                                                                                   |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| The microservices approach means images are dense and often have relatively small file sizes, so they can be quicker to deploy, share, migrate, and move                                                                |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| Compared to containerisation, VMs are more secure than containers because they are fully isolated (i.e. vulnerabilities in one host kernel won't affect all the others thanks to using different OS kernels in each VM) |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+| The compartmentalisation approach of microservices makes maintenance and changes to an app easier to implement                                                                                                          |   |
+
+| \\|                                                                                                                                                                                                                      |   |
+
+## Microservices
+
+- a solution to monolith apps, where the whole app is built into one package and deployed all or nothing
+- once apps reach a certain size/complexity in monolith architectures, development and startup slow down
+- **microservices**: splitting large apps into loosely coupled services that run in their own process and can be deployed independently, e.g. on Uber, microservices include passenger management, billing, driver management, trip management, notifications
+- they communicate using lightweight mechanisms like APIs
+- enable faster feature delivery and scaling for large apps
+- each microservice should be small, as independent as possible, and specialised, with a minimal set of features
+
+### Benefits
+
+- allow DevOps teams to introduce new components without causing downtime because microservices are independent
+- improves fault isolation
+- accelerate deloyment
+- optimise resource allocation because teams work on small, well-defined services
+
+## Docker
+
+- **Container**: A lightweight, standalone, and executable package that includes everything needed to run a piece of software
+- **Image**: like a template or blueprint for containers; it contains all the instructions needed to create a container
+  - Docker images are at the core of how Docker operates; they provide a consistent, portable, and efficient way to package and distribute applications
+  - **Official images**: images curated by Docker; typically well-maintained and documented so a good choice for beginners
+- [**Docker Hub**](https://hub.docker.com): a cloud-based registry service where Docker users and orgs can store and distribute their Docker images; like a GitHub for Docker images, **serving as a central repository** where you can find, share, and manage Docker images
+-**Docker Engine**: The core technology that runs and manages containers on your machine
+- **Tags**: aliases that point to versions of an image (e.g. *latest*, *2.1*, or *Linux*); when you don't specify a tag in your commands, Docker assumes you want the "latest" tag
+  -  useful for **version control** because you can tag images with version numbers (e.g. v1, v2)
+  - **environment separation**: you might tag images for different environments (e.g. dev, staging, prod)
+  - **readability**: custom tags can make it clearer what an image is for
+- **Pull command**: On each image's page, there is a "pull command"; this is what you'd use to manually download the image without running a container; e.g. `docker pull hello-world`
+![`alt text`](images/image-3.png)
+- **Dockerfile**: Many images on Docker Hub will have a link to their Dockerfile, which is the script used to build the image; can be helpful to understand how the image was created -- created with a capital D and no extension
+- Docker images are built using a **layered filesystem**, with each layer representing a set of filesystem changes, with each layer corresponding to a command in the Dockerfile used to build the image
+  - this layered approach allows Docker to be efficient with storage and network usage
+  - a long string (called a SHA256 hash) represents a layer in the image
+  - Understanding layers is crucial because:
+    - they are cached, speeding up builds of similar images
+    - they are shared between images, saving disk space
+    - when pushing or pulling images, only changed layers need to be transferred
+
 
 
 ---
@@ -282,10 +421,9 @@ ENTRYPOINT ["/start.sh"]
 
 ### What I learnt
 
-- I learnt about saving images to tar files and how this is helpful when trasferring images to a system without internet access, sharing images outside of a registry, or for backing up
+- I learnt about saving images to tar files and how this is helpful when transferring images to a system without internet access, sharing images outside of a registry, or for backing up
 - I learnt that, on Linux OSes, you have to add yourself to the Docker group in order to avoid having to preface every `docker` command with `sudo`
 
 ### Benefits I personally saw from the project
 
 - After the Docker learning curve, this seems like a much easier process than the previous methods for deployment that we used
-- It's also reusable
