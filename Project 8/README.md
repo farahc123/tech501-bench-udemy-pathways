@@ -323,4 +323,4 @@ services:
 ## Benefits I personally saw from the project
 
 - After the learning curve, using Docker seems like a much easier process than the previous methods for deployment that we used
-- On the [Sparta container task](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose), I preferred my second automatic method command as it was simpler, so I used this as the basis for the EC2 extension task
+- On the [Sparta container task](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose), I preferred my first automatic method command as it was simpler, so I used this as the basis for the EC2 extension task
