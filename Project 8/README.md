@@ -186,7 +186,7 @@ services:
   1. Re-run the Nginx container exposed on port 80 of my local machine ![`alt text`](images/image-12.png)
   2.  Check the default webpage of the container in my web browser and keep it open for later ![`alt text`](images/image-11.png)
   3.  Access the shell of the Nginx container that is running with with `docker exec -it my-nginx sh` (use sh not /bin/sh/)![alt text](images/image-15.png)
-  4. After logging into the shell of the Nginx container, try to do an update & upgrade with `sudo` -- notice the problem, then install sudo to fix it
+  4. After logging into the shell of the Nginx container, try to do an update & upgrade with `sudo` — notice the problem, then install sudo to fix it
     -  had to do `apt update` first then install sudo 
 ![`alt text`](images/image-16.png)
   - I could then update and upgrade as normal
@@ -269,7 +269,7 @@ services:
 
   - **Dockerfile**: 
   ![dockerfile](images/image-69.png)
-  
+
   - **Results**:
   ![`results`](images/image-65.png)
 
@@ -301,7 +301,7 @@ services:
 
 1. After creating an EC2 instance running on Ubuntu 22.04, I had to install Docker on Ubuntu 22.04 via the CLI using [these steps](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
 2. I then had to add myself to the Docker group on my EC2 to avoid having to use `sudo` for every `docker` command following [these steps](https://docs.docker.com/engine/install/linux-postinstall/)
-3. On my local machine, I created a ***tar*** file with `docker save -o sparta-app-image.tar project8-app-db-method2` -- this saved the Sparta test app image to a file that I could then transfer to my EC2 instance 
+3. On my local machine, I created a ***tar*** file with `docker save -o sparta-app-image.tar project8-app-db-method2` — this saved the Sparta test app image to a file that I could then transfer to my EC2 instance 
 4. I then SCPed this tar file to the EC2 instance using `scp -i ~/.ssh/tech501-farah-aws-key.pem sparta-app-image.tar ubuntu@ec2-52-215-19-68.eu-west-1.compute.amazonaws.com:~` ![alt text](images/image-84.png)
 5. Once this tar file was on the EC2 instance, I loaded the image from it with `docker load -i sparta-app-image.tar`
 6. I then modified my original Dockerfile to make it work with the tar file (i.e. by removing the `COPY app/ .` command; see below for explanation)
