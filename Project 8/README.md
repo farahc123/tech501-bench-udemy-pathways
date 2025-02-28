@@ -1,10 +1,10 @@
-# Udemy Project 8
+# **Udemy Project 8**
 
-- [Udemy Project 8](#udemy-project-8)
+- [**Udemy Project 8**](#udemy-project-8)
   - [Goal of the project](#goal-of-the-project)
   - [GitHub repo](#github-repo)
   - [Installing Docker Desktop](#installing-docker-desktop)
-- [Research](#research)
+- [**Research**](#research)
   - [Virtualisation vs containerisation](#virtualisation-vs-containerisation)
     - [Benefits of virtualisation vs containerisation](#benefits-of-virtualisation-vs-containerisation)
   - [Microservices](#microservices)
@@ -14,27 +14,25 @@
     - [Docker Compose](#docker-compose)
     - [Alternatives to Docker](#alternatives-to-docker)
     - [Success story using Docker](#success-story-using-docker)
-- [Task 1: Learning to manage Docker containers locally](#task-1-learning-to-manage-docker-containers-locally)
+- [**Task 1: Learning to manage Docker containers locally**](#task-1-learning-to-manage-docker-containers-locally)
   - [Run and pull my first image](#run-and-pull-my-first-image)
   - [Run Nginx web server in a Docker container](#run-nginx-web-server-in-a-docker-container)
   - [Remove a container](#remove-a-container)
   - [Modify the Nginx default page in the running container](#modify-the-nginx-default-page-in-the-running-container)
   - [Run a different container on a different port](#run-a-different-container-on-a-different-port)
   - [**Blockers**](#blockers)
-- [Task 2: Using Docker Hub to host custom images](#task-2-using-docker-hub-to-host-custom-images)
+- [**Task 2: Using Docker Hub to host custom images**](#task-2-using-docker-hub-to-host-custom-images)
   - [Push host-custom-static-webpage container](#push-host-custom-static-webpage-container)
   - [Automate Docker image creation using a Dockerfile](#automate-docker-image-creation-using-a-dockerfile)
   - [**Blockers**](#blockers-1)
-- [Task 3: Running Sparta test app in a container using Dockerfile and Docker Compose](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose)
+- [**Task 3: Running Sparta test app in a container using Dockerfile and Docker Compose**](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose)
   - [Initial steps and manual method](#initial-steps-and-manual-method)
   - [Automatic method 1](#automatic-method-1)
   - [Automatic method 2](#automatic-method-2)
   - [**Blockers**](#blockers-2)
-- [Extension task: Running the containers on an EC2 instance](#extension-task-running-the-containers-on-an-ec2-instance)
+- [**Extension task: Running the containers on an EC2 instance**](#extension-task-running-the-containers-on-an-ec2-instance)
   - [Steps](#steps)
   - [**Blockers**](#blockers-3)
-- [What I learnt from the project](#what-i-learnt-from-the-project)
-  - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project)
 
 ## Goal of the project
 
@@ -50,7 +48,7 @@
 
 ---
 
-# Research
+# **Research**
 
 ## Virtualisation vs containerisation
 
@@ -163,7 +161,7 @@ services:
 
 ---
 
-# Task 1: Learning to manage Docker containers locally
+# **Task 1: Learning to manage Docker containers locally**
 
 ## Run and pull my first image
   1. Get help from a Docker command ![alt text](images/image-100.png)
@@ -220,7 +218,7 @@ services:
 
 ---
 
-# Task 2: Using Docker Hub to host custom images 
+# **Task 2: Using Docker Hub to host custom images** 
 
 - To easily access, store, and share images via Docker Hub's central repository
 
@@ -248,7 +246,7 @@ services:
 
 ---
 
-# Task 3: Running Sparta test app in a container using Dockerfile and Docker Compose
+# **Task 3: Running Sparta test app in a container using Dockerfile and Docker Compose**
 
 - The goal of this project is to containerise the deployment of the Sparta test app and the database using Docker
 
@@ -292,7 +290,7 @@ services:
 
 ---
 
-# Extension task: Running the containers on an EC2 instance
+# **Extension task: Running the containers on an EC2 instance**
 
 - The goal of this project is to containerise the deployment of the Sparta test app and the database using Docker and AWS
 - This replicates a possible production task (deploying the app onto a VM)  
@@ -316,7 +314,7 @@ services:
 - I realised I had to add myself to the Docker group to give myself the correct permissions so that I didn't need to preface every `docker` command with `sudo`
 - I also realised I couldn't just reuse my original Dockerfile because I no longer needed to copy the Sparta test app folder (this was referenced in my `COPY app/ .` command) as I already had this in the tar file, so I had to edit my Compose file
 
-# What I learnt from the project
+**# What I learnt from the project**
 
 - How Docker containers and images work
 - That containers don't always come with the packages I expect (e.g. `sudo` and `nano`)
@@ -324,7 +322,7 @@ services:
 - About saving images to tar files and how this is helpful when transferring images to a system without internet access, sharing images outside of a registry, or for backing up
 - That, on Linux OSes, you have to add yourself to the Docker group in order to avoid having to preface every `docker` command with `sudo`
 
-## Benefits I personally saw from the project
+**# Benefits I personally saw from the project**
 
 - After the learning curve, using Docker seems like a much easier process than the previous methods for deployment that we used
 - On the [Sparta container task](#task-3-running-sparta-test-app-in-a-container-using-dockerfile-and-docker-compose), I preferred my first automatic method command as it was simpler, so I used this as the basis for the EC2 extension task
