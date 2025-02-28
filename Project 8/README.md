@@ -264,10 +264,12 @@ services:
 ## Automatic method 1
 
 - Automatically seeding the database using one command in the Docker Compose file ([all files here](<automatic method 1 docker>)):
-  - **Compose file**: ![compose](images/image-68.png)
+  - **Compose file**: 
+  ![compose](images/image-68.png)
   - **Dockerfile**: 
   ![dockerfile](images/image-69.png)
-  - **Results**: ![`results`](images/image-65.png)
+  - **Results**:
+  ![`results`](images/image-65.png)
 
 ## Automatic method 2
 - Automatically seeding the database using a health-check on the MongoDB container in my Docker Compose file ([all files here](<automatic method 2 docker>)):
