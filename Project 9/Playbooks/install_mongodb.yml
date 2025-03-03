@@ -1,0 +1,51 @@
+---
+- name: Install, configure, and enable MongoDB on db hosts
+  hosts: db
+  become: yes
+  tasks:
+    - name: Install gnupg and curl
+      shell: |
+        DEBIAN_FRONTEND=noninteractive apt install gnupg curl -y
+      register: install_packages
+
+    - name: Download MongoDB GPG key
+      get_url:
+       url: "https://www.mongodb.org/static/pgp/server-7.0.asc"
+       dest: "/tmp/mongodb-server-7.0.asc"
+       mode: '0644'
+
+    - name: Dearmor MongoDB GPG key
+      command: gpg --batch --yes -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor /tmp/mongodb-server-7.0.asc
+
+    - name: Add MongoDB repository
+      shell: |
+        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+      register: add_repo
+
+    - name: Update package lists
+      apt:
+        update_cache: yes
+      register: update_packages
+
+    - name: Install MongoDB components
+      shell: |
+        apt install -y mongodb-org=7.0.6 mongodb-org-database=7.0.6 mongodb-org-server=7.0.6 mongodb-mongosh mongodb-org-mongos=7.0.6 mongodb-org-tools=7.0.6
+      register: install_mongo
+
+    - name: Update MongoDB bindIp setting to listen to all sources
+      replace:
+        path: /etc/mongod.conf
+        regexp: '^bindIp: 127.0.0.1'
+        replace: 'bindIp: 0.0.0.0'
+      register: update_bind_ip
+
+    - name: Enable MongoDB to start on boot
+      systemd:
+        name: mongod
+        enabled: yes  # enables mongodb
+
+    - name: Start MongoDB service
+      systemd:
+        name: mongod
+        state: restarted  # restarts mongodb
+

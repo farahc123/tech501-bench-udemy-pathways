@@ -1,0 +1,1 @@
+- `ansible all -m ping` -- tests Ansible's connectivity to all hosts in the inventory file (`-m` is the flag when using modules e.g. `ping`)

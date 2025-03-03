@@ -1,0 +1,16 @@
+---
+- name: Updating and upgrading app and db EC2s
+  hosts:
+    - web
+    - db
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # one hour in seconds, so it will run update after one hour
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist  # upgrades everything on the distro
