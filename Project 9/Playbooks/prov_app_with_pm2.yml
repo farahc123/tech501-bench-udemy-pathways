@@ -1,0 +1,71 @@
+---
+- name: Setup Node.js 20 and Install App Dependencies
+  hosts: farah-ec2-instance-app
+  become: true
+
+  tasks:
+    - name: Install Node.js and npm
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # one hour in seconds, so it will run update after 1 hour
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist  # upgrades everything on the distro
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Configure Nginx as reverse proxy
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+            
+            root /var/www/html;
+            index index.html index.htm index.nginx-debian.html;
+            server_name _;
+            
+            location / {
+                proxy_pass http://localhost:3000;
+            }
+          }
+      register: nginx_config_changed
+      notify: Restart Nginx
+
+    - name: Remove existing app directory if it exists
+      file:
+        path: "/home/ubuntu/app"
+        state: absent
+
+    - name: Clone the repository (dev branch)
+      git:
+        repo: "https://github.com/farahc123/tech501-sparta-app-CICD.git"
+        dest: "/home/ubuntu/repo"
+        version: "dev"
+
+    - name: Navigate to the app folder and install dependencies and start the app
+      environment:
+        DB_HOST: "mongodb://172.31.49.226:27017/posts"
+      shell: |
+        cd /home/ubuntu/repo/nodejs20-sparta-test-app/app
+        pm2 stop app.js || true
+        npm install
+        node seeds/seed.js
+        pm2 start app.js
+  
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,40 @@
+---
+- name: Install and enable nginx play
+  hosts: web
+  become: yes  # becomes a super user, meaning sudo isn't needed in anything below
+  gather_facts: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # one hour in seconds, so it will force update the cache after 1 hour
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist  # upgrades everything on the distro
+
+    - name: Install and configure nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes  # makes sure the apt cache is updated before installing nginx
+
+    - name: Enable Nginx to start on boot
+      systemd:
+        name: nginx
+        enabled: yes  # enables nginx
+
+    - name: Update Nginx config to use proxy_pass instead of try_files
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: 'try_files \$uri \$uri/ =404;'
+        replace: 'proxy_pass http://localhost:3000;'
+      register: nginx_config_changed
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
