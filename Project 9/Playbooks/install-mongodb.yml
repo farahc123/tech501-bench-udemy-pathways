@@ -35,7 +35,7 @@
     - name: Update MongoDB bindIp setting to listen to all sources
       replace:
         path: /etc/mongod.conf
-        regexp: '^bindIp: 127.0.0.1'
+        regexp: 'bindIp: 127.0.0.1'
         replace: 'bindIp: 0.0.0.0'
       register: update_bind_ip
 
@@ -44,7 +44,7 @@
         name: mongod
         enabled: yes  # enables mongodb
 
-    - name: Start MongoDB service
+    - name: Restart MongoDB service
       systemd:
         name: mongod
         state: restarted  # restarts mongodb

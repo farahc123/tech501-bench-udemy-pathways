@@ -1,0 +1,98 @@
+# not to be actually run, just for reference
+
+---
+- name: Shows how to use different modules
+  hosts: [individual host or group of hosts]
+  become: yes  # becomes a super user, meaning sudo isn't needed in anything below
+  gather_facts: yes # add info
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # one hour in seconds, so it will force update the cache after 1 hour
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist  # upgrades everything on the distro
+
+    - name: Install and configure a package
+      apt:
+        name: <package_name>
+        state: present
+        update_cache: yes  # makes sure the apt cache is updated before installing package
+
+    - name: Enables a service, i.e. so it starts on boot
+      systemd:
+        name: <package/service name e.g. mongod>
+        enabled: yes 
+        notify: Restart a service
+
+    - name: Restart services
+      systemd:
+        name: <package/service name e.g. mongod>
+        state: restarted 
+
+    - name: Start a service
+      systemd:
+        name: <package/service name e.g. mongod>
+        state: started 
+
+    - name: Replaces text in a file
+      replace:
+        path: <path to file to be modified>
+        regexp: 'example text to remove'
+        replace: 'example text to add in place of regexp'
+
+    - name: Remove existing app directory if it exists
+      file:
+        path: "/home/examplefolder"
+        state: absent
+
+    - name: Clones a GitHub repository (main branch)
+      git:
+        repo: "https://github.com/farahc123/example.git"
+        dest: "/home/farah/examplerepo" # path for repo to be cloned to
+        version: "main" # branch to clone
+
+    - name: Run shell commands with an environment variable
+      environment:
+        DB_HOST: "example_variable:example_value"
+      shell: |
+        <first bash commands to be run in usual syntax>
+        <second bash command to be run in usual syntax, note this is on a new line>
+    
+    - name: File to be downloaded from given URL
+      get_url:
+       url: "https://www.example.com/example.txt"
+       dest: "/home/farah/" # where it should be downloaded to
+       mode: '0644' # permissions for file in octal format
+
+    - name: Example command
+      command: one-line command to be run, no quotes
+
+    - copy:
+        src: /path/to/local/file
+        dest: /path/to/remote/file
+        owner: user
+        group: group
+        mode: '0644' # permissions for file in octal format
+
+    - name: Backup a file with copy module
+      copy:
+        src: /home/farah/example
+        dest: /home/farah/example.bak
+        remote_src: yes # this tells Ansible to copy the file from the target node, not the controller
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
+
+# HANDLERS
+
+  handlers:
+    - name: Restart a service
+      systemd:
+        name: <package/service name e.g. mongod>
+        state: restarted

@@ -1,0 +1,13 @@
+[defaults]
+inventory = /home/ubuntu/project/inventory
+remote_user = ubuntu # sets the default user for SSH connections
+host_key_checking = False # disables SSH host key checking, which can be useful in test environments (but should be enabled in production for security)
+stdout_callback = yaml # changes the output format to YAML for better readability
+deprecation_warnings=False # turns off ALL deprecation warnings when running commands
+interpreter_python=/usr/bin/python3 # sets default python interpreter, which would avoid python deprecation warnings only (would need to check the path to the correct python interpreter though)
+
+[privilege_escalation]
+become = True # enables privilege escalation by default.
+become_method = sudo # sets sudo as privilege escalation
+become_user = root # specifies which user to become when escalating privileges
+become_ask_pass = False # disables request for sudo password
