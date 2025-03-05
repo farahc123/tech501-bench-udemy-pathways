@@ -1,8 +1,8 @@
 ---
 - name: Install and enable nginx play
   hosts: web
-  become: yes  # becomes a super user, meaning sudo isn't needed in anything below
-  gather_facts: yes
+  become: yes  # becomes a super user, meaning sudo isn't needed in any command below
+  gather_facts: yes # gets comprehensive facts about the host 
 
   tasks:
     - name: Update apt cache
