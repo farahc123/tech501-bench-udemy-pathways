@@ -1,0 +1,1 @@
+Welcome! This repo contains all of my notes and some code for some projects I have been working on pre-assignment.
