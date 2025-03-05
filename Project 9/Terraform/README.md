@@ -1,0 +1,1 @@
+This folder contains the Terraform files used to create my app and database EC2s.

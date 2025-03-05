@@ -105,7 +105,7 @@
     - name: Remove existing app directory if it exists
       file:
         path: "/home/ubuntu/app"
-        state: absent
+        state: absent # ensures the path is absent
 
     - name: Clone the repository (main branch)
       git:

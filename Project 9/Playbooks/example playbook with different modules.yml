@@ -4,13 +4,13 @@
 - name: Shows how to use different modules
   hosts: [individual host or group of hosts]
   become: yes  # becomes a super user, meaning sudo isn't needed in anything below
-  gather_facts: yes # add info
+  gather_facts: yes
 
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
-        cache_valid_time: 3600  # one hour in seconds, so it will force update the cache after 1 hour
+        cache_valid_time: 3600  # optional; one hour in seconds, so it will force update the cache after 1 hour
 
     - name: Upgrade all packages
       apt:
@@ -44,7 +44,7 @@
         regexp: 'example text to remove'
         replace: 'example text to add in place of regexp'
 
-    - name: Remove existing app directory if it exists
+    - name: Remove existing directory if it exists
       file:
         path: "/home/examplefolder"
         state: absent
@@ -54,6 +54,7 @@
         repo: "https://github.com/farahc123/example.git"
         dest: "/home/farah/examplerepo" # path for repo to be cloned to
         version: "main" # branch to clone
+        force: yes # overwrites the directory if it already exists
 
     - name: Run shell commands with an environment variable
       environment:

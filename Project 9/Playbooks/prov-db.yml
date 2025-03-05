@@ -31,3 +31,16 @@
       shell: |
         apt install -y mongodb-org=7.0.6 mongodb-org-database=7.0.6 mongodb-org-server=7.0.6 mongodb-mongosh mongodb-org-mongos=7.0.6 mongodb-org-tools=7.0.6
       register: install_mongo
+
+    - name: Update MongoDB bindIp setting to listen to all sources
+      replace:
+        path: /etc/mongod.conf
+        regexp: 'bindIp: 127.0.0.1'
+        replace: 'bindIp: 0.0.0.0'
+      register: update_bind_ip
+
+    - name: Enable MongoDB to start on boot
+      systemd:
+        name: mongod
+        enabled: yes  # enables mongodb
+        state: restarted  # restarts mongodb
