@@ -1,0 +1,12 @@
+# A template showing the /etc/ansible/hosts file syntax for EC2 hosts
+
+localhost ansible_connection=local # for connection to local machine, if needed; note the lack of need for a group name
+
+[production:children]
+webservers # didn't use this, but storing for syntax example
+
+[webservers]
+webserver1 ansible_host=1.1.1.1 ansible_user=farah
+
+[webservers:vars]
+http_port=80 # sets variables to be used for all hosts in webservers group

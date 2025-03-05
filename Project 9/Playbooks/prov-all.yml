@@ -1,0 +1,130 @@
+---
+- name: Provision db hosts
+  hosts: db
+  become: yes
+  tasks:
+    - name: Install gnupg and curl
+      shell: |
+        DEBIAN_FRONTEND=noninteractive apt install gnupg curl -y
+
+    - name: Download MongoDB GPG key
+      get_url:
+       url: "https://www.mongodb.org/static/pgp/server-7.0.asc"
+       dest: "/tmp/mongodb-server-7.0.asc"
+       mode: '0644'
+
+    - name: Dearmor MongoDB GPG key
+      command: gpg --batch --yes -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor /tmp/mongodb-server-7.0.asc
+
+    - name: Add MongoDB repository
+      shell: |
+        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install MongoDB components
+      apt:
+        name:
+         - mongodb-org=7.0.6
+         - mongodb-org-database=7.0.6
+         - mongodb-org-server=7.0.6
+         - mongodb-mongosh
+         - mongodb-org-mongos=7.0.6
+         - mongodb-org-tools=7.0.6
+        state: present
+        update_cache: yes
+
+    - name: Update MongoDB bindIp setting to listen to all sources
+      replace:
+        path: /etc/mongod.conf
+        regexp: 'bindIp: 127.0.0.1'
+        replace: 'bindIp: 0.0.0.0'
+      notify: Restart MongoDB
+
+    - name: Enable MongoDB
+      systemd:
+        name: mongod
+        enabled: yes  # enables mongodb, i.e. starts on boot
+      notify: Restart MongoDB
+
+  handlers:
+    - name: Restart MongoDB
+      systemd:
+        name: mongod
+        state: restarted
+
+# play for app VM
+
+- name: Provision app VM with dependencies and run app with PM2
+  hosts: web
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # one hour in seconds, so it will refresh update cache after 1 hour
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist  # upgrades everything on the distro
+
+    - name: Install Node.js 20
+      shell: |
+        DEBIAN_FRONTEND=noninteractive curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+      args:
+        creates: /usr/bin/node  # prevents the task from running if Node.js is already installed
+
+    - name: Install and configure nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes  # makes sure the apt cache is updated before installing nginx
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
+
+    - name: Backup the original Nginx config
+      copy:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-available/default.bak
+        remote_src: yes  # ensures the file is copied from the target node, not the controller
+
+    - name: Replace try_files with proxy_pass in Nginx config
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*try_files\s+\$uri\s+\$uri/\s+=404;'
+        replace: 'proxy_pass http://localhost:3000;'
+      register: nginx_config_changed
+      notify: Restart Nginx
+
+    - name: Remove existing app directory if it exists
+      file:
+        path: "/home/ubuntu/app"
+        state: absent
+
+    - name: Clone the repository (main branch)
+      git:
+        repo: "https://github.com/farahc123/tech501-sparta-app-CICD.git"
+        dest: "/home/ubuntu/repo"
+        version: "main"
+
+    - name: Navigate to the app folder and install dependencies and start the app
+      environment:
+        DB_HOST: "mongodb://3.250.201.7:27017/posts"
+      shell: |
+        cd /home/ubuntu/repo/nodejs20-sparta-test-app/app
+        pm2 stop all
+        pm2 delete all
+        npm install
+        pm2 start app.js
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted

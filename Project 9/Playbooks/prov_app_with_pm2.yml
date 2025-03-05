@@ -1,15 +1,9 @@
 ---
 - name: Setup Node.js 20 and Install App Dependencies
-  hosts: farah-ec2-instance-app
+  hosts: web
   become: true
 
   tasks:
-    - name: Install Node.js and npm
-      apt:
-        name: nodejs
-        state: present
-        update_cache: yes
-
     - name: Update apt cache
       apt:
         update_cache: yes
@@ -18,6 +12,13 @@
     - name: Upgrade all packages
       apt:
         upgrade: dist  # upgrades everything on the distro
+
+    - name: Install Node.js 20
+      shell: |
+        DEBIAN_FRONTEND=noninteractive curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+      args:
+        creates: /usr/bin/node  # Prevents the task from running if Node.js is already installed
 
     - name: Install PM2 globally
       npm:
@@ -31,11 +32,11 @@
           server {
             listen 80 default_server;
             listen [::]:80 default_server;
-            
+
             root /var/www/html;
             index index.html index.htm index.nginx-debian.html;
             server_name _;
-            
+
             location / {
                 proxy_pass http://localhost:3000;
             }
@@ -56,14 +57,14 @@
 
     - name: Navigate to the app folder and install dependencies and start the app
       environment:
-        DB_HOST: "mongodb://172.31.49.226:27017/posts"
+        DB_HOST: "mongodb://54.171.112.116:27017/posts"
       shell: |
         cd /home/ubuntu/repo/nodejs20-sparta-test-app/app
         pm2 stop app.js || true
         npm install
         node seeds/seed.js
         pm2 start app.js
-  
+
   handlers:
     - name: Restart Nginx
       service:
