@@ -2,3 +2,11 @@ app/
 Notes.md
 sparta-app-image.tar
 labex-projects/
+images/
+README_tmp.html
+.vscode/
+.gitattributes
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+variable.tf
