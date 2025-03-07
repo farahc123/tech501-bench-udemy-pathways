@@ -1,0 +1,22 @@
+apiVersion: apps/v1 
+kind: Deployment # defines the type of kubernetes object
+metadata:
+  name: sparta-app-deployment # deployment name
+spec: # specifies the desired state of the deployment
+  replicas: 3 # number of identical pods to be run
+  selector:
+    matchLabels:
+      app: sparta-app # tells the deployment which pods to manage by matching the labels/tags
+  template: # contains the pod template, to be used when creating new pods
+    metadata:
+      labels:
+        app: sparta-app # label/tag for pod, this must match the replica selector label
+    spec: # specifies the desired state of the pod
+      containers:
+      - name: sparta-app # container name
+        image: farahc123/project8-app-db-method2 # image to be pulled from docker hub
+        ports:
+        - containerPort: 3000 # for the NodeJS app
+        env: # setting environment variable to connect the database later on
+        - name: DB_HOST
+          value: "mongodb://mongo-svc:27017/posts"

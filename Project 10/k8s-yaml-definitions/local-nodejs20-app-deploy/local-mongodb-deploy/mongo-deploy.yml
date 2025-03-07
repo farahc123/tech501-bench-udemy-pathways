@@ -1,0 +1,26 @@
+apiVersion: apps/v1 
+kind: Deployment # defines the type of kubernetes object
+metadata:
+  name: mongo-deployment # deployment name
+spec: # specifies the desired state of the deployment
+  replicas: 1 # number of identical pods to be run
+  selector:
+    matchLabels:
+      app: mongo # tells the deployment which pods to manage by matching the labels/tags
+  template: # contains the pod template, to be used when creating new pods
+    metadata:
+      labels:
+        app: mongo # label/tag for pod, this must match the replica selector label
+    spec: # specifies the desired state of the pod
+      containers:
+      - name: mongo # container name
+        image: mongo # image to be pulled from docker hub
+        ports:
+        - containerPort: 27017 # for the NodeJS app
+        volumeMounts:
+            - name: mongo-pv
+              mountPath: /data/db  # MongoDB stores its data here
+      volumes:
+        - name: mongo-pv
+          persistentVolumeClaim:
+            claimName: mongo-pvc  # Reference to the PVC you created
