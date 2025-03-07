@@ -29,7 +29,7 @@
   - [Create and run playbooks to provision the app and database](#create-and-run-playbooks-to-provision-the-app-and-database)
   - [Extension task: Create and run playbook to print facts gathered](#extension-task-create-and-run-playbook-to-print-facts-gathered)
   - [**Blockers**](#blockers-1)
-- [What I learnt](#what-i-learnt)
+- [What I learn](#what-i-learn)
 - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project)
 
 ## Goal of this project
@@ -68,7 +68,7 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
 ## Ansible
 
 - **Ansible**: an open-source automation tool that allows you to configure IT infrastructure
-- Ansible is installed on a **controller node**, which can then manage the configuration of remote **target nodes **
+- Ansible is installed on a **controller node**, which can then manage the configuration of remote **target nodes**
 - Ansible is **agentless**, i.e. doesn't require you to install anything on the target nodes
 - Ansible is written in Python
 - **playbook**: a file that defines a set of Ansible tasks to be executed on remote hosts; written in YAML because it's easy to read and write ([example here](<Playbooks/example playbook with different modules.yml>))
@@ -263,9 +263,17 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
    - seemingly because of this ![`alt text`](images/image-40.png)
    - so I upgraded my Ansible version using `sudo pip3 install --upgrade ansible` (I used *pip3* here just to try out this package manager) — my playbook then ran fine
 3. I got this Python deprecation warning ![`alt text`](images/image-41.png) so I silenced it by editing my *ansible.cfg* file like this (note that I later realised I could have added `interpreter_python=/usr/bin/python3` to this file instead to achieve the same result) ![`alt text`](images/image-42.png)
-   - This removed the warning ![`alt text`](images/image-43.png) 
+   - This removed the warning ![`alt text`](images/image-43.png)
 4. My posts page originally wasn't seeded, which I later fixed by changing the order of my commands
 
-# What I learnt
+# What I learn
+
+- I learnt about how Ansible works, including ad hoc commands, playbooks, configuration files, and inventory/host files
+- I also learnt about Ansible's modules, which allowed me to execute tasks in an idempotent way
+- I learnt that indentation is very important to get right in my playbooks
 
 # Benefits I personally saw from the project
+
+- I found it very useful to be able to run one playbook and have the entire 2-tier app up and running with a single command (once I'd set up my *prov-all.yml* playbook)
+- Once I familiarised myself with Ansible I found its modules easier to understand at a glance than my Bash scripts
+- I also really appreciated that Ansible allows you to avoid having to preface playbook commands with `sudo` thanks to the `become: yes` option
