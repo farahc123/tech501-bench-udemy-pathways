@@ -1,12 +1,13 @@
-# A template showing the /etc/ansible/hosts file syntax for EC2 hosts
+# A template showing the /etc/ansible/hosts file syntax for EC2 hosts; I didn't use this, it's just for reference
+# in a production environment, this file might be called prod_hosts
 
 localhost ansible_connection=local # for connection to local machine, if needed; note the lack of need for a group name
 
-[production:children]
-webservers # didn't use this, but storing for syntax example
+[production:children] # creates a parent group called production, which has the webservers group as a child
 
-[webservers]
-webserver1 ansible_host=1.1.1.1 ansible_user=farah
+[webservers] # group name, helps to order hosts logically
+webserver1 ansible_host=1.1.1.1 ansible_user=farah ansible_connection=ssh ansible_ssh_private_key_file=/path/to/private/key
+
 
 [webservers:vars]
 http_port=80 # sets variables to be used for all hosts in webservers group

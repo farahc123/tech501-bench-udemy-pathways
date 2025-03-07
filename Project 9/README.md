@@ -71,13 +71,17 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
 - Ansible is installed on a **controller node**, which can then manage the configuration of remote **target nodes **
 - Ansible is **agentless**, i.e. doesn't require you to install anything on the target nodes
 - Ansible is written in Python
-- **playbook**: a file that defines a set of Ansible tasks to be executed on remote hosts; written in YAML because it's easy to read and write
+- **playbook**: a file that defines a set of Ansible tasks to be executed on remote hosts; written in YAML because it's easy to read and write ([example here](<Playbooks/example playbook with different modules.yml>))
 - it uses **modules**
 - Installing Ansible should create the */etc/ansible/* directory, but it's normal for this not to be created in some environments, so it (and all the files within) can be manually created if not automatically done
 -  **Typical files in */etc/ansible***:
    - [***ansible.cfg***](<Playbooks/example ansible.cfg file>) — configuration file, usually named this if using only one config file but doesn't strictly have to be
    - [***hosts***](<Playbooks/example hosts file>) (i.e. inventory file) — file containing the host groups and hosts, usually named this if only using one hosts file but doesn't strictly have to be
-- **Hosts file:**
+- **Hosts/inventory file:**
+  - usually *.ini* or *.yml* but I didn't specify an extension and it worked
+  - you can have multiple hosts/inventory files (useful for different environments), and you can run a playbook on multiple hosts file by chaining this `-i <path to first hosts file> -i <path to second hosts file>` etc. after the `ansible-playbook` command
+    - note that the playbook will only run once on any hosts common to both files as Ansible **de-duplicates** hosts by default
+    - note that any `debug` (i.e. print outs of variables) in a single-playbook, multi-hosts file execution will only print the value for the last hosts file in the `ansible-playbook` statement (e.g. the last hostname in the order)
   - can include nested groups, i.e. hierarchies, e.g. `[production: children] webservers`, which tells Ansible that production is a group with children groups (here, *webservers*)
     - this means that any hosts in *webservers* are also in *production*, so configs applied to/commands run on the *production* group are also applied to all hosts in all of its child groups (note that you can still run commands and apply configs only on the child groups by specifying them)
 - **Gathering facts** in Ansible means collecting information about a host's system outputted as variables; these include information on their OS, RAM, storage, IP address, etc.
@@ -104,6 +108,7 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
   - `command` module (default module used for ad hoc commands, so doesn't need to be specified with `-m command`)
   - `copy` module — for copying folders and files from the local machine to remote hosts
   - `file` module — manages files and directories on hosts
+  - `debug` module — prints statements during the play's execution; often prints the value of variables to verify changes have been made
   - `setup` module — gathers facts (i.e. information) outputted as variables about target host(s), e.g. OS, RAM, storage, IP address, etc.
 
 - **Advantages of default `command` module:**

@@ -57,4 +57,5 @@
 
 - `ansible-playbook <playbook name>` — runs given playbook
   - `ansible-playbook <playbook name> --syntax-check` — checks the syntax of the given playbook, outputting any errors in red
+  - `-i <optional: given hosts path/filename>` — optional; can be added to a playbook command to specify a particular inventory/hosts file if you have multiple; to run one playbook using multiple inventory files, you simply add another `-i <optional: given hosts path/filename>` after the first, e.g. `ansible-playbook -i <first hosts file path> -i <second hosts file path> <playbook name>`
 - `ansible-playbook -i <given hosts file if not default> <playbook name>` — runs given playbook using given hosts file
