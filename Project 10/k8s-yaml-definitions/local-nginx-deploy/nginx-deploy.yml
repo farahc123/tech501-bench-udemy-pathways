@@ -1,0 +1,19 @@
+apiVersion: apps/v1 
+kind: Deployment # defines the type of kubernetes object
+metadata:
+  name: nginx-deployment # deployment name
+spec: # specifies the desired state of the deployment
+  replicas: 5 # number of identical pods to be run
+  selector:
+    matchLabels:
+      app: nginx # tells the deployment which pods to manage by matching the labels/tags
+  template: # contains the pod template, to be used when creating new pods
+    metadata:
+      labels:
+        app: nginx # label/tag for pod
+    spec: # specifies the desired state of the pod
+      containers:
+      - name: nginx # container name
+        image: daraymonsta/nginx-257:dreamteam # image to be pulled from docker hub
+        ports:
+        - containerPort: 80
