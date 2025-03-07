@@ -29,7 +29,7 @@
   - [Create and run playbooks to provision the app and database](#create-and-run-playbooks-to-provision-the-app-and-database)
   - [Extension task: Create and run playbook to print facts gathered](#extension-task-create-and-run-playbook-to-print-facts-gathered)
   - [**Blockers**](#blockers-1)
-- [What I learn](#what-i-learn)
+- [What I learnt](#what-i-learnt)
 - [Benefits I personally saw from the project](#benefits-i-personally-saw-from-the-project)
 
 ## Goal of this project
@@ -118,13 +118,13 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
 
 ## Diagram of my Ansible architecture
 
-![alt text](udemy-ansible-diagram.drawio.png)
+![alt text](images/udemy-ansible-diagram.drawio.png)
 
 # **Day 1 tasks**
 
 ## Create EC2 instances for Ansible controller and first target node
 
-1. Created my controller EC2 and first target node (i.e. the app EC2) and confirmed I could SSH into them ![alt text](image.png)
+1. Created my controller EC2 and first target node (i.e. the app EC2) and confirmed I could SSH into them ![alt text](images/image.png)
   - **Controller EC2 settings**:
     - **Image**: Ubuntu 22.04 LTS
     - **Size**: t3.micro
@@ -266,7 +266,7 @@ The goal of this project is to use Ansible and AWS to implement a 2-tier cloud d
    - This removed the warning ![`alt text`](images/image-43.png)
 4. My posts page originally wasn't seeded, which I later fixed by changing the order of my commands
 
-# What I learn
+# What I learnt
 
 - I learnt about how Ansible works, including ad hoc commands, playbooks, configuration files, and inventory/host files
 - I also learnt about Ansible's modules, which allowed me to execute tasks in an idempotent way
