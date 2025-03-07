@@ -1,14 +1,14 @@
 # not to be actually run, just for reference
 
----
-- name: Shows how to use different modules
+---   # these lines mark the start of a YAML file
+- name: Shows how to use different modules # descriptive name for the play, which starts with a dash
   hosts: [individual host or group of hosts]
   become: yes  # becomes a super user, meaning sudo isn't needed in anything below
-  gather_facts: yes
+  gather_facts: yes # gathers information about the specified hosts, e.g. IP address, OS etc.
 
-  tasks:
-    - name: Update apt cache
-      apt:
+  tasks: # all plays require a tasks line
+    - name: Update apt cache  # descriptive name for task
+      apt: # name of the module to be used
         update_cache: yes
         cache_valid_time: 3600  # optional; one hour in seconds, so it will force update the cache after 1 hour
 
@@ -38,11 +38,50 @@
         name: <package/service name e.g. mongod>
         state: started 
 
+- name: Another play to show how to use different modules # descriptive name for the play, which starts with a dash
+  hosts: [individual host or group of hosts] # all plays require a hosts line
+  become: yes  # becomes a super user, meaning sudo isn't needed in anything below
+  vars: # setting variables that can be used in this entire play, meaning if we need to change it, we only have to change it once for all tasks referencing this variable 
+    dir_path: /home/farah/variablefolder
+    file_content: "Hello from Ansible! The time is {{ ansible_date_time.date }}" # using Ansible's built in date and time function
+  gather_facts: no # skips gathering facts to speed up the playbook's execution
+
+  tasks: # all plays require a tasks line
     - name: Replaces text in a file
       replace:
         path: <path to file to be modified>
         regexp: 'example text to remove'
         replace: 'example text to add in place of regexp'
+
+    - name: Create a directory
+      file:
+        path: "/home/createdfolder"
+        state: directory
+        mode: '0644' # permissions for folder in octal format
+
+    - name: Create a directory using directory variable
+      file:
+        path: "{{ dir_path }}" # referencing the variable set for the play
+        state: directory
+        mode: '0644' # permissions for folder in octal format
+
+    - name: Create a file with specific content
+      copy:
+        content: "Hello from Ansible!"
+        dest: /home/farah/createdfolder/hello.txt
+
+    - name: Create a file with content from a variable
+      copy:
+        content: "{{ file_content }}"
+        dest: "{{ dir_path }}/variablefile.txt"
+
+    - name: Display file content
+      debug: # this module prints statements during the play's execution
+        msg: "The content of the file is {{ file_content }}"
+
+    - name: Print environment type
+      debug:
+        msg: "This host belongs to the {{ 'production' if 'prod' in group_names else 'development' }} environment" # example of using an if statement to print specific information according to a variable's value; group_names is a default Ansible variable
 
     - name: Remove existing directory if it exists
       file:
@@ -57,7 +96,7 @@
         force: yes # overwrites the directory if it already exists
 
     - name: Run shell commands with an environment variable
-      environment:
+      environment: # an environment variable only for this task
         DB_HOST: "example_variable:example_value"
       shell: |
         <first bash commands to be run in usual syntax>
@@ -71,6 +110,14 @@
 
     - name: Example command
       command: one-line command to be run, no quotes
+
+    - name: Show hostname
+      command: hostname
+      register: hostname_output # stores the output of the task execution (in this case, the command `hostname`) in a variable for later use; can be custom named
+
+    - name: Display hostname
+      debug:
+        msg: "The hostname is: {{ hostname_output.stdout }}" # prints out the value (accessed by standard output) of the variable created in the above task
 
     - copy:
         src: /path/to/local/file
