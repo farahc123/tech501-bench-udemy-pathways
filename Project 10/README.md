@@ -384,6 +384,7 @@ o How to get Kubernetes working again after restarting the cloud instance
    4. ran restart
    5. ran status ![alt text](image-97.png)
    6. To test this, I then stopped my EC2 instance, started it, logged in, and ran `sudo systemctl status minikube` ![alt text](image-99.png)
+   7. But I can't run any `kubectl` commands after this as the api server doesn't run which I can see from `minikube status` (I think it's because it's changed context) so I've paused for now
 
 
 
