@@ -2,6 +2,8 @@
 
 - [Commands](#commands)
   - [Cluster commands](#cluster-commands)
+  - [HPA-related commands](#hpa-related-commands)
+  - [Minikube-related commands](#minikube-related-commands)
 
 ## Cluster commands
 
@@ -19,5 +21,15 @@
 - `kubectl get all -l <label selector key=label selector value as defined in yaml file>` -- lists details on the resources matching the key=value set in the command
 - `kubectl apply -f <yaml filename>` -- creates deployment/service/etc based on the specifications defined in the given YAML file (`-f` standing for file)
 - `kubectl get replicaset`
-- `kubectl scale deployment nginx-deployment --replicas=6`
-- `kubectl rollout restart deployment sparta-app-deployment`
+- `kubectl scale deployment <deployment name> --replicas=<number of desired replicas>`
+- `kubectl rollout restart deployment <deployment name>`
+- `kubectl delete deployment <deployment name>`
+
+## HPA-related commands
+
+- `kubectl get hpa`
+
+## Minikube-related commands
+
+- `minikube start --driver=docker`
+- `minikube delete`

@@ -15,6 +15,13 @@ spec: # specifies the desired state of the deployment
       containers:
       - name: sparta-app # container name
         image: farahc123/project8-app-db-method2 # image to be pulled from docker hub
+        resources:
+            requests:
+              cpu: "100m"      # 100 millicores or 0.1 CPU core
+              memory: "128Mi"   # 128 MiB of memory
+            limits:
+              cpu: "200m"       # Optional: You can also define CPU limits if needed
+              memory: "256Mi"
         ports:
         - containerPort: 3000 # for the NodeJS app
         env: # setting environment variable to connect the database later on
