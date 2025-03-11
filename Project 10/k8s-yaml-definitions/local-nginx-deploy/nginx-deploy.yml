@@ -3,7 +3,7 @@ kind: Deployment # defines the type of kubernetes object
 metadata:
   name: nginx-deployment # deployment name
 spec: # specifies the desired state of the deployment
-  replicas: 5 # number of identical pods to be run
+  replicas: 1 # number of identical pods to be run
   selector:
     matchLabels:
       app: nginx # tells the deployment which pods to manage by matching the labels/tags
