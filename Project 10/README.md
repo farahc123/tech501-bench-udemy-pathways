@@ -264,37 +264,20 @@ Add:
   
 ## Extension task: Remove PVC and retain data in Persistent Volume
 
-- I don't understand how this task is supposed to work, because once the PV is deleted, because the data isn't being backed up anywhere, it will be deleted full stop?
+- There seems to be a mismatch between the title of this task and the steps
+- I don't understand how to complete this task following the steps because you can't delete a PVC if it's defined in a manifest file for a deployment that is currently running, so you also have to delete/scale down the deployment
+- Then, once the PV is deleted, because the data isn't being backed up anywhere, the data itself will be deleted, meaning it won't be the same when the PV is created again -- because as I understand it, the Retain reclaim policy only applies when the PVC is deleted, which can't be done because of the above
 
+How I did it:
 
-on host:
-![alt text](image-118.png)
-
-
-
-
-
-
-
-
-
-
-
-on local:
-
-1. Started out with this posts page: ![alt text](image-119.png)
-2. Ran this `kubectl edit pvc mongo-pvc` ![alt text](image-115.png)
-   1. and made `finalizers: []`
-3. Ran `kubectl delete pvc mongo-pvc`
-4. Ran `kubectl delete pv mongo-pv`
-5. created both their yml files
-6. rollout restart?
-7. checked posts page again
-
-
-6. `kubectl scale deployment mongo-deployment --replicas=0` — this deletes the PV and PVC automatically as no replicas exist
-7. 
-
+- These were the records on my /posts page before beginning this task ![alt text](image-123.png)
+- Ran `kubectl scale deployment mongo-deployment --replicas=0` to essentially delete all *mongo-deployment* pods ![alt text](image-126.png)
+  - Verified that there were now no *mongo-deployment* pods with `kubectl get pods` 
+- Ran `kubectl delete pvc mongo-pvc` to delete the PVC
+  - Verified that there was now no *mongo-pvc* PVC with `kubectl get pvc` ![alt text](image-125.png)
+- Ran `kubectl scale deployment mongo-deployment --replicas=1` to create a *mongo-deployment* pod
+- Created the PVC again with `kubectl apply -f mongo-pvc.yml`
+- Once the pod was running, I verified that the records on the */posts* page were still the same ![alt text](image-124.png)
 
 ## **Blockers**
 

@@ -29,6 +29,8 @@
   - `kubectl get all -A` -- lists all resources across all namespaces 
   - `kubectl get all -l <label selector key=label selector value as defined in yaml file>` -- lists details on the resources matching the key=value set in the command
 - `kubectl config current-context` -- tells you what context you're connected to
+- `kubectl config use-context <context name>` -- switches to given context
+
 - `kubectl logs <resource name>` -- outputs logs for a given resource
   - `kubectl logs -f <resource name>` -- allows you to follow a resource's logs in real-time
   - `kubectl logs <pod name> -c <container name>` -- outputs logs for a given container in a given pod
@@ -56,7 +58,8 @@
 - `kubectl exec -it <pod name> -- /bin/bash` -- runs an interactive shell in the given pod using the above shell type (which can be changed)
 - `kubectl label pods <pod name> <label name>=<label value>` -- applies a key-value pair as a label to a given pod 
 - `kubectl label pods <pod name> <label name>-` -- removes the given label (note the minus symbol after the label name) from a given pod
-- 
+- kubectl port-forward svc/<name of service> <local port>:<target port>
+
 
 ## HPA-related commands
 
