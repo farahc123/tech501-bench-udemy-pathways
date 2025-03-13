@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sparta-app-hpa
+spec:
+  scaleTargetRef: # defines the target deployment that will be scaled
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sparta-app-deployment # name of the target deployment
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 5 # sets a maximum of 5% CPU utilization as the metric to trigger scaling 

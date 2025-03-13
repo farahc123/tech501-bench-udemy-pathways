@@ -1,19 +1,21 @@
-apiVersion: apps/v1 
-kind: Deployment # defines the type of kubernetes object
+apiVersion: apps/v1 # specifies the K8s API version to be used when creating this object; apps is used for deployments because it handles higher-level app management resources
+kind: Deployment # defines the type of kubernetes object to be created
 metadata:
-  name: nginx-deployment # deployment name
-spec: # specifies the desired state of the deployment
-  replicas: 1 # number of identical pods to be run
-  selector:
-    matchLabels:
-      app: nginx # tells the deployment which pods to manage by matching the labels/tags
-  template: # contains the pod template, to be used when creating new pods
+  name: nginx-deployment # sets the deployment name, which is how it will be referred to in kubectl commands
+  labels: # key-value pairs attached to objects; used to organise objects into subsets
+    app: nginx # sets the label/tag for the deployment
+spec: # describes the desired state of the deployment
+  replicas: 1 # number of identical pods that should be running in this deployment; was originally 3 at start of task
+  selector: # a mechanism to filter pods based on labels/tags so the deployment knows which pods it should manage
+    matchLabels: # tells the deployment to manage pods that match the below label/tag
+      app: nginx # specifies that all pods with the app=nginx label/tag should be managed
+  template: # defines the pod specification, which the deployment uses when creating new pods
     metadata:
       labels:
-        app: nginx # label/tag for pod
+        app: nginx # label/tag for pod; these MUST match the selector labels in the deployment spec
     spec: # specifies the desired state of the pod
-      containers:
-      - name: nginx # container name
+      containers: # a list of container(s) to be run in the pod
+      - name: nginx # sets the container name
         image: daraymonsta/nginx-257:dreamteam # image to be pulled from docker hub
-        ports:
-        - containerPort: 80
+        ports: # a list of ports that the container will expose
+        - containerPort: 80 # HTTP port

@@ -8,5 +8,5 @@ spec:
   accessModes:
     - ReadWriteOnce  # the volume will be mounted as read-write by a single node (my local machine)
   hostPath:
-    path: /mnt/data  # path on the host (docker desktop) where the data will be stored
+    path: /data/db  # path on the host (docker desktop) where the data will be stored
   persistentVolumeReclaimPolicy: Retain  # keeps the data after the PV is deleted

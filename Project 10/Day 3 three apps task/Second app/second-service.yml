@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-tech201-app-service
+spec:
+  selector:
+    app: nginx-tech201-app
+  ports:
+    - protocol: TCP
+      port: 9000 # the internal port assigned to the service which it then uses to access the pods inside the cluster
+      targetPort: 80 # the port that the service forwards traffic to; the service accepts requests on port 9000 and sends them here because this is the port the connected deployment is listening on
+      nodePort: 30002 # the external port exposed on each node in the cluster, so external traffic is then directed to port 9000 and then to 80 as above
+  type: LoadBalancer

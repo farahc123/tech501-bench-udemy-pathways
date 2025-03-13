@@ -17,13 +17,13 @@ spec: # specifies the desired state of the deployment
         image: farahc123/project8-app-db-method2 # image to be pulled from docker hub
         resources:
             requests:
-              cpu: "100m"      # 100 millicores or 0.1 CPU core
-              memory: "128Mi"   # 128 MiB of memory
+              cpu: "100m"      # a minimum of 100 millicores or 0.1 CPU core will be assigned to the container
+              memory: "128Mi"   # a minimum of 128 MiB of memory will be assigned to the container
             limits:
-              cpu: "200m"       # Optional: You can also define CPU limits if needed
-              memory: "256Mi"
+              cpu: "200m"       # a maximum of 200 millicores or 0.2 CPU core can be used by the container
+              memory: "256Mi" # a maximum of 256 MiB of memory can be used by the container
         ports:
         - containerPort: 3000 # for the NodeJS app
-        env: # setting environment variable to connect the database later on
-        - name: DB_HOST
-          value: "mongodb://mongo-svc:27017/posts"
+        env: # sets environment variables 
+        - name: DB_HOST # sets the key of the environment variable to be used to connect the database later on
+          value: "mongodb://mongo-svc:27017/posts" # sets the value of the environment variable to be used to connect to the database later on
