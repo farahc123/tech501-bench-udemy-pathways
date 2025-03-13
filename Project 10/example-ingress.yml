@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: myapp.example.com  # external domain
+    http:
+      paths:
+      - path: /frontend # this means going to myapp.example.com/frontend routes you to the below service
+        pathType: Prefix # means that any request that starts with /frontend in the URL will be routed to the service below, e.g. myapp.example.com/frontend/home and myapp.example.com/frontend/about will both be routed to the frontend service; an alternative is Exact, which means only requests to myapp.example.com/frontend/ would be routed to the frontend service
+        backend:
+          service:
+            name: frontend-svc
+            port:
+              number: 80 # the port that the connected service is listening on, which then routes traffic according to the port specified in the given service's YAML file 
+      - path: /backend # this means going to myapp.example.com/backend routes you to the below service
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-svc
+            port:
+              number: 80

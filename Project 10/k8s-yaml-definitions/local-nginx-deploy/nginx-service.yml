@@ -1,12 +1,12 @@
-apiVersion: v1
+apiVersion: v1 # specifies the K8s API version to be used when creating this object
 kind: Service
 metadata:
   name: nginx-svc
 spec:
   type: NodePort # defines the type of service
   selector:
-    app: nginx
+    app: nginx # targets pods with the label app=nginx
   ports:
     - port: 80 # service is exposed on this port inside the cluster
-      targetPort: 80 # the port on the container inside the pod where traffic should be directed to
+      targetPort: 80 # the port on the container inside the pod where traffic should be directed to because this is where the app is listening
       nodePort: 30001 # service is mapped to this port on the node
