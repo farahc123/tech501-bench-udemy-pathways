@@ -28,7 +28,7 @@
   - [**Blockers**](#blockers-1)
 - [Day 3 Tasks](#day-3-tasks)
   - [Setup minikube on a cloud instance running Ubuntu 22.04 LTS](#setup-minikube-on-a-cloud-instance-running-ubuntu-2204-lts)
-  - [Deploy on three apps on one cloud instance running minikube](#deploy-on-three-apps-on-one-cloud-instance-running-minikube)
+  - [Deploy three apps on one cloud instance running Minikube](#deploy-three-apps-on-one-cloud-instance-running-minikube)
     - [First app](#first-app)
     - [Second app](#second-app)
     - [Third deployment](#third-deployment)
@@ -86,8 +86,8 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 - **Ingress**: if you  have multiple services that need to be accessed via the same external IP, this add-on routes traffic to a service based on hostnames or paths; [see example here](example-ingress.yml)
 
 **Kubernetes architecture diagrams by Labex:**
-![alt text](image-2.png)
-![namespaces diagram](image-3.png)
+![`alt text`](images/image-2.png)
+![`namespaces diagram`](images/image-3.png)
 
 ### Kubernetes objects
 
@@ -111,7 +111,7 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 - **Context:** the combination of a cluster, user, and namespace
 
 **Diagram by labex.io**
-![alt text](image-121.png)
+![`alt text`](images/image-121.png)
 
 ### Lifecycle
 
@@ -128,45 +128,45 @@ The goal of this project is to containerise the deployment of the Sparta test ap
   3. **Cluster Autoscaler**: automatically adds/removes nodes in a cluster based on pods' requested resources
 
 **Diagrams by kubecost.com:**
-![HPA autoscaling diagram](image-42.png)
-![how HPA works](image-43.png)
+![`HPA autoscaling diagram`](images/image-42.png)
+![`how HPA works`](images/image-43.png)
 
 # Day 1 Tasks
 
 ## Get Kubernetes running using Docker Desktop
 
-1. I ran `kubectl get service` on Git Bash and got this expected error ![alt text](image-1.png)
-2. To solve this, I enabled Kubernetes in Docker Desktop ![alt text](image-4.png)
-3. I re-ran `kubectl get service` and saw that Kubernetes was now running ![alt text](image-5.png)
+1. I ran `kubectl get service` on Git Bash and got this expected error ![`alt text`](images/image-1.png)
+2. To solve this, I enabled Kubernetes in Docker Desktop ![`alt text`](images/image-4.png)
+3. I re-ran `kubectl get service` and saw that Kubernetes was now running ![`alt text`](images/image-5.png)
 
 ## Create Nginx deployment only
 
 1. Created a [deployment file](k8s-yaml-definitions/local-nginx-deploy/nginx-deploy.yml)
-2. Ran `kubectl apply -f nginx-deploy.yml` to create the deployment ![alt text](image-6.png)
-3. Ran `kubectl get deployment nginx-deployment` to get details on the deployment ![alt text](image-10.png)
-4. Ran `kubectl get replicaset` to get details on the ReplicaSets ![alt text](image-11.png)
-5. Ran `kubectl get pods` to get details on the pods ![alt text](image-12.png)
-6. Ran `kubectl get all -l app=nginx` to see details on all three with one command ![alt text](image-120.png)
-7. Tried to access my deployment via my web browser at localhost and ClusterIP but this didn't work (as expected), because the ClusterIP is a private IP address only accessible within the cluster ![alt text](image-13.png)
+2. Ran `kubectl apply -f nginx-deploy.yml` to create the deployment ![`alt text`](images/image-6.png)
+3. Ran `kubectl get deployment nginx-deployment` to get details on the deployment ![`alt text`](images/image-10.png)
+4. Ran `kubectl get replicaset` to get details on the ReplicaSets ![`alt text`](images/image-11.png)
+5. Ran `kubectl get pods` to get details on the pods ![`alt text`](images/image-12.png)
+6. Ran `kubectl get all -l app=nginx` to see details on all three with one command ![`alt text`](images/image-120.png)
+7. Tried to access my deployment via my web browser at localhost and ClusterIP but this didn't work (as expected), because the ClusterIP is a private IP address only accessible within the cluster ![`alt text`](images/image-13.png)
 
 ## Get a NodePort service running
 
 - We do this to expose the deployment outside of the cluster, making it visible in a browser and to the outside world
 
 1. Created a [service file](k8s-yaml-definitions/local-nginx-deploy/nginx-service.yml)
-2. Created the service with `kubectl apply -f nginx-service.yml` ![alt text](image-14.png)
-3. Ran `kubectl get svc nginx-svc` to get details on the service ![alt text](image-15.png)
-4. On my web browser, navigated to *localhost:30001* to verify the NodePort service was running ![alt text](image-16.png) 
+2. Created the service with `kubectl apply -f nginx-service.yml` ![`alt text`](images/image-14.png)
+3. Ran `kubectl get svc nginx-svc` to get details on the service ![`alt text`](images/image-15.png)
+4. On my web browser, navigated to *localhost:30001* to verify the NodePort service was running ![`alt text`](images/image-16.png) 
 
 ## See what happens when we delete a pod
 
-1. Ran `kubectl get pods` to list the pods ![alt text](image-17.png)
-2. Ran `kubectl delete pod nginx-deployment-68d98fd8fc-2j8ht` to delete one of the pods (in this case, the first pod) in the above list ![alt text](image-18.png)
-3. Re-ran `kubectl get pods` and saw that Kubernetes had automatically recreated a pod to satisfy the requirements in my deployment file ![alt text](image-19.png)
+1. Ran `kubectl get pods` to list the pods ![`alt text`](images/image-17.png)
+2. Ran `kubectl delete pod nginx-deployment-68d98fd8fc-2j8ht` to delete one of the pods (in this case, the first pod) in the above list ![`alt text`](images/image-18.png)
+3. Re-ran `kubectl get pods` and saw that Kubernetes had automatically recreated a pod to satisfy the requirements in my deployment file ![`alt text`](images/image-19.png)
 4. To get detailed information about the newest pod, I:
-   1. Ran `kubectl get pods --sort-by=.metadata.creationTimestamp` to get a list of pods by their time of creation ![alt text](image-20.png)
+   1. Ran `kubectl get pods --sort-by=.metadata.creationTimestamp` to get a list of pods by their time of creation ![`alt text`](images/image-20.png)
    2. Ran `kubectl describe pod nginx-deployment-68d98fd8fc-4pbt2` to get detailed information on the newest pod
-   3. Then automated this process by running `kubectl describe pod $(kubectl get pods --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1].metadata.name}')` to get details on the newest pod — this command uses the output of the parenthetical command as a variable, with `items[-1]` getting the last item in the list of pods ordered by their creation time (which runs from oldest-newest) ![alt text](image-22.png)
+   3. Then automated this process by running `kubectl describe pod $(kubectl get pods --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[-1].metadata.name}')` to get details on the newest pod — this command uses the output of the parenthetical command as a variable, with `items[-1]` getting the last item in the list of pods ordered by their creation time (which runs from oldest-newest) ![`alt text`](images/image-22.png)
 
 ## Increase replicas with no downtime
 
@@ -174,26 +174,26 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 
 ### Method 1: editing the deployment file in real-time
 
-1. I ran `kubectl edit deployment nginx-deployment` — this opened up an editable version of the in-use deployment file in Notepad, so I changed the number of replicas to 4, saved (with *Ctrl-S*), and exited the file ![alt text](image-23.png) 
-2. I then ran `kubectl get pods` again and verified that there were now 4 pods running ![alt text](image-24.png)
+1. I ran `kubectl edit deployment nginx-deployment` — this opened up an editable version of the in-use deployment file in Notepad, so I changed the number of replicas to 4, saved (with *Ctrl-S*), and exited the file ![`alt text`](images/image-23.png) 
+2. I then ran `kubectl get pods` again and verified that there were now 4 pods running ![`alt text`](images/image-24.png)
 
 ### Method 2: Apply a modified deployment file
 
 1. Edited the *nginx-deploy.yml* file to change the number of replicas to 5
 2. Applied the updated file by running `kubectl apply -f nginx-deploy.yml` again
-3. Ran `kubectl get pods` again to verify that there were now 5 pods running ![alt text](image-25.png)
+3. Ran `kubectl get pods` again to verify that there were now 5 pods running ![`alt text`](images/image-25.png)
 
 ### Method 3: Use the scale command
 
 - This is a quick way of scaling up/down, but isn't persistent (unlike editing the YAML files or using a HPA)
 
-1. I ran `kubectl scale deployment nginx-deployment --replicas=6` to scale this deployment by 1 more replica ![alt text](image-26.png)
-2. Ran `kubectl get pods` again to verify that there were now 6 pods running ![alt text](image-27.png)
+1. I ran `kubectl scale deployment nginx-deployment --replicas=6` to scale this deployment by 1 more replica ![`alt text`](images/image-26.png)
+2. Ran `kubectl get pods` again to verify that there were now 6 pods running ![`alt text`](images/image-27.png)
 
 ## Delete K8s deployments and services
 
-1. Ran `kubectl delete -f nginx-deploy.yml` and `kubectl delete -f nginx-service.yml` to delete the Nginx deployment and service ![alt text](image-28.png)
-2. Ran `kubectl get all` to verify that they (and the ReplicaSets and pods) were deleted ![alt text](image-29.png)
+1. Ran `kubectl delete -f nginx-deploy.yml` and `kubectl delete -f nginx-service.yml` to delete the Nginx deployment and service ![`alt text`](images/image-28.png)
+2. Ran `kubectl get all` to verify that they (and the ReplicaSets and pods) were deleted ![`alt text`](images/image-29.png)
 
 ## K8s deployment of NodeJS Sparta test app
 
@@ -201,15 +201,15 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 
 1. Created my [*app-deploy.yml*](k8s-yaml-definitions/local-nodejs20-app-deploy/app-deploy.yml) and [*app-service.yml*](k8s-yaml-definitions/local-nodejs20-app-deploy/app-service.yml) files
 2. Ran`kubectl apply -f app-deploy.yml` and `kubectl apply -f app-service.yml` to create these resources based on the above files
-3. Navigated to *localhost:30002* (the port specified in my *app-service.yml* file) to verify that this was successful ![alt text](image-30.png)
+3. Navigated to *localhost:30002* (the port specified in my *app-service.yml* file) to verify that this was successful ![`alt text`](images/image-30.png)
 4. Created my [*mongodb-service.yml*](k8s-yaml-definitions/local-nodejs20-app-deploy/local-mongodb-deploy/mongo-service.yml) and [*mongodb-deploy.yml*](k8s-yaml-definitions/local-nodejs20-app-deploy/local-mongodb-deploy/mongo-deploy.yml) files 
-5. Ran `kubectl apply -f mongodb-deploy.yml` and `kubectl apply -f mongodb-service.yml` to create these resources based on the above files ![alt text](image-31.png)
-6. Navigated to *localhost:30002/posts* to verify that the deployment and database connection was successful ![alt text](image-32.png)
+5. Ran `kubectl apply -f mongodb-deploy.yml` and `kubectl apply -f mongodb-service.yml` to create these resources based on the above files ![`alt text`](images/image-31.png)
+6. Navigated to *localhost:30002/posts* to verify that the deployment and database connection was successful ![`alt text`](images/image-32.png)
 
 ## **Blockers**
 
 1. I had issues enabling Kubernetes with Docker Desktop as it hung on "Starting Kubernetes" for a long time; I'm not sure why this happened but it was solved by manually installing Kubernetes via Chocolatey and then enabling Kubernetes again via Docker Desktop
-2. After having to restart my laptop, I created the deployments again, but my posts page wasn't seeded (though I didn't receive any errors) — I thought this might have been because either of my pods or services hadn't been fully initialised before the connection was made, so I resolved this by running `kubectl rollout restart deployment sparta-app-deployment` to restart the app deployment — this worked (note the new record, indicating a re-seeding has taken place) ![alt text](image-33.png)
+2. After having to restart my laptop, I created the deployments again, but my posts page wasn't seeded (though I didn't receive any errors) — I thought this might have been because either of my pods or services hadn't been fully initialised before the connection was made, so I resolved this by running `kubectl rollout restart deployment sparta-app-deployment` to restart the app deployment — this worked (note the new record, indicating a re-seeding has taken place) ![`alt text`](images/image-33.png)
 
 # Day 2 Tasks
 
@@ -223,61 +223,51 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 1. Created a *mongo-pv.yml* and a *mongo-pvc.yml* file ([both found here](k8s-yaml-definitions/local-nodejs20-app-deploy/local-mongodb-deploy/)), with 100Mb in both the PV and the claim (since I only have one MongoDB pod)
 2. Created the PV with `kubectl apply -f mongo-pv.yml`
 3. Created the PVC with `kubectl apply -f mongo-pv.yml` 
-4. Verified they were both created successfully ![alt text](image-35.png)
-- For reference, this is what my *localhost:30002/posts* page looked like at this point ![alt text](image-39.png)
-1. Deleted my database deployment with `kubectl delete deployment mongo-deployment` ![alt text](image-37.png)
-2. Verified that my *posts* page no longer worked ![alt text](image-41.png)
-3. Recreated the above deployment with `kubectl apply -f mongo-deploy.yml` and visited *localhost:30002/posts* again to verify that the records were still the same ![alt text](image-40.png)
+4. Verified they were both created successfully ![`alt text`](images/image-35.png)
+- For reference, this is what my *localhost:30002/posts* page looked like at this point ![`alt text`](images/image-39.png)
+1. Deleted my database deployment with `kubectl delete deployment mongo-deployment` ![`alt text`](images/image-37.png)
+2. Verified that my *posts* page no longer worked ![`alt text`](images/image-41.png)
+3. Recreated the above deployment with `kubectl apply -f mongo-deploy.yml` and visited *localhost:30002/posts* again to verify that the records were still the same ![`alt text`](images/image-40.png)
 
 ## Use Horizontal Pod Autoscaler (HPA) to scale the app
 
 1. Installed the Metrics Server add-on (a requirement for HPAs) with `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
-2. Created a HPA with one command `kubectl autoscale deployment sparta-app-deployment --cpu-percent=5 --min=2 --max=10` (note that this can also be done via a YAML file, [which I included here](k8s-yaml-definitions/local-nodejs20-app-deploy/app-hpa.yml)) ![alt text](image-44.png)
-3. Verified it was running with `kubectl get hpa` !![alt text](image-45.png)
-4. Installed Apache Benchmark on Windows by downloading Apache 2.4.63-250207 Win64 from [Apache Lounge](https://www.apachelounge.com/download/) and adding it to the PATH environment variable ![alt text](image-46.png)
-   -  I verified it was installed with `ab -V` !![alt text](image-47.png)
-5. Ran this `ab -n 10000 -c 1000 http://localhost:30002/`
-6. Watched the CPU activity with `kubectl get hpa -w` ![alt text](image-48.png)
-7. Verified that pods were being created with `kubectl get pods` ![alt text](image-49.png)
-   - and also with `kubectl describe deployment sparta-app-deployment` (note the instances of "Scaled up") ![alt text](image-55.png)
-8. I waited a little while for the cooldown period to be over so that the HPA started scaling down again ![alt text](image-50.png)
-9.  Also verified with `kubectl describe deployment sparta-app-deployment` ![alt text](image-51.png)
-    - Note that HPA minimums take precedence over the number of replicas defined in my *app-deploy.yml* file, which is why I now only have 2 app pods ![alt text](image-52.png)
-    1.  I repeated these steps by running `ab -n 1000 -c 100 http://127.0.0.1:30002/` ![alt text](image-58.png)
-    2.  When running `kubectl get pods -w` ![alt text](image-56.png)
-    3.  And verifying only 2 pods left again after ![alt text](image-57.png)
-    4.  And with `kubectl describe deployment sparta-app-deployment` ![alt text](image-59.png)
+2. Created a HPA with one command `kubectl autoscale deployment sparta-app-deployment --cpu-percent=5 --min=2 --max=10` (note that this can also be done via a YAML file, [which I included here for illustration purposes](k8s-yaml-definitions/local-nodejs20-app-deploy/app-hpa.yml)) ![`alt text`](images/image-44.png)
+3. Verified the HPA was running with `kubectl get hpa` ![`alt text`](images/image-45.png)
+4. Installed Apache Benchmark (a load-testing tool) on Windows by downloading *Apache 2.4.63-250207 Win64* from [Apache Lounge](https://www.apachelounge.com/download/) and adding it to the PATH environment variable on my local machine ![`alt text`](images/image-46.png)
+   -  I verified that Apache Benchmark was installed with `ab -V` !![`alt text`](images/image-47.png)
+5. Ran this command to send 10000 requests (1000 at a time) to my app `ab -n 10000 -c 1000 http://localhost:30002/`
+6. Watched the CPU activity with `kubectl get hpa -w` ![`alt text`](images/image-48.png)
+7. Verified that new pods were being created to meet the increased demand with with `kubectl get pods` ![`alt text`](images/image-49.png)
+   - and also with `kubectl describe deployment sparta-app-deployment` (note the instances of "Scaled up") ![`alt text`](images/image-55.png)
+8. I waited a little while for the HPA's cooldown period to be over so that the HPA started scaling down again ![`alt text`](images/image-50.png)
+9.  I also verified this with `kubectl describe deployment sparta-app-deployment` ![`alt text`](images/image-51.png)
+    - Note that HPA minimums take precedence over the number of replicas defined in my *app-deploy.yml* file, which is why I now only have 2 app pods ![`alt text`](images/image-52.png)
   
 ## Extension task: Remove PVC and retain data in Persistent Volume
 
-- There seems to be a mismatch between the title of this task and the steps
-- I don't understand how to complete this task following the steps because you can't delete a PVC if it's defined in a manifest file for a deployment that is currently running, so you also have to delete/scale down the deployment
-- Then, once the PV is deleted, because the data isn't being backed up anywhere, the data itself will be deleted, meaning it won't be the same when the PV is created again -- because as I understand it, the Retain reclaim policy only applies when the PVC is deleted, which can't be done because of the above
-
-How I did it:
-
-- These were the records on my /posts page before beginning this task ![alt text](image-123.png)
-- Ran `kubectl scale deployment mongo-deployment --replicas=0` to essentially delete all *mongo-deployment* pods ![alt text](image-126.png)
+- These were the records on my */posts* page before beginning this task ![`alt text`](images/image-123.png)
+1. Ran `kubectl scale deployment mongo-deployment --replicas=0` to essentially delete all *mongo-deployment* pods ![`alt text`](images/image-126.png)
   - Verified that there were now no *mongo-deployment* pods with `kubectl get pods` 
-- Ran `kubectl delete pvc mongo-pvc` to delete the PVC
-  - Verified that there was now no *mongo-pvc* PVC with `kubectl get pvc` ![alt text](image-125.png)
-- Ran `kubectl scale deployment mongo-deployment --replicas=1` to create a *mongo-deployment* pod
-- Created the PVC again with `kubectl apply -f mongo-pvc.yml`
-- Once the pod was running, I verified that the records on the */posts* page were still the same ![alt text](image-124.png)
-- I then deleted all of the resources used in Day 1 and Day tasks with `kubectl delete all --all --namespace default` ![alt text](image-127.png)
+2. Ran `kubectl delete pvc mongo-pvc` to delete the PVC
+  - Verified that there was now no *mongo-pvc* PVC with `kubectl get pvc` ![`alt text`](images/image-125.png)
+3. Ran `kubectl scale deployment mongo-deployment --replicas=1` to create a *mongo-deployment* pod
+4. Created the PVC again with `kubectl apply -f mongo-pvc.yml`
+5. Once the pod was running, I verified that the records on the */posts* page were still the same ![`alt text`](images/image-124.png)
+6. I then deleted all of the resources used in Day 1 and Day 2 tasks with `kubectl delete all --all --namespace default` ![`alt text`](images/image-127.png)
 
 ## **Blockers**
 
 1. I had blockers getting my Metrics Server and HPA to work, because it would say unknown/5% (which was the metric I set); I got around this by adding a resource block to my *app-deploy.yml*, deleting the pods, and then trying again
-2. For some reason, during the HPA task, *localhost:30002* stopped showing the app, but *127.0.0.1:30002* did, so I edited *C:\Windows\System32\drivers\etc\hosts* to uncomment *127.0.0.1 localhost* ![alt text](image-53.png) and restarted my laptop, and this resolved the issue for a time ![alt text](image-54.png)
+2. For some reason, during the HPA task, *localhost:30002* stopped showing the app, but *127.0.0.1:30002* did, so I edited *C:\Windows\System32\drivers\etc\hosts* to uncomment *127.0.0.1 localhost* ![`alt text`](images/image-53.png) and restarted my laptop, and this resolved the issue for a time ![`alt text`](images/image-54.png)
    - However it reoccurred after running the `ab` command on `localhost:30002`, so after troubleshooting unsuccessfully I just reverted to using `127.0.0.1:30002` in my commands and browser instead
 
 # Day 3 Tasks 
 
 ## Setup minikube on a cloud instance running Ubuntu 22.04 LTS
 
-1. Created a t3a.small EC2, Ubuntu 22.04 LTS EC2 named tech501-farah-kubernetes-minikube-ec2, inbound access on port 9000 from anywhere ![alt text](image-60.png)
-2. Ran `sudo apt update && sudo apt upgrade -y`
+1. I created a t3a.small EC2 using the Ubuntu 22.04 LTS OS named *tech501-farah-kubernetes-minikube-ec2*, with inbound network access allowed on port 9000 from anywhere ![`alt text`](images/image-60.png)
+2. I  logged into the EC2 via SSH and ran `sudo apt update && sudo apt upgrade -y`
 3. Installed Nginx with `sudo apt install nginx -y`
 4. Installed and configured Docker (a dependency):
 ```
@@ -291,7 +281,7 @@ sudo curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-l
 sudo mv minikube-linux-amd64 /usr/local/bin/minikube
 sudo chmod +x /usr/local/bin/minikube
 ```
-1. Verified Minikube was installed with `minikube version` ![alt text](image-61.png)
+1. Verified Minikube was installed with `minikube version` ![`alt text`](images/image-61.png)
 2. Added myself to the Docker group with `sudo usermod -aG docker $USER && newgrp docker` so that I could run the next command
 3. Installed `kubectl` following [these steps](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 ```
@@ -302,65 +292,65 @@ sudo chmod +x /usr/local/bin/minikube
 ```
 4. Installed Metrics server with `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
 
-## Deploy on three apps on one cloud instance running minikube
+## Deploy three apps on one cloud instance running Minikube
 
 ### First app
 
 1. Started Minikube with `minikube start` (at this point, I would have to do this whenever I rebooted the EC2 instance)
-2. Created Nginx deployment and service files ([both found here](<Day 3 three apps task/First app>))
-3. Applied them with `minikube kubectl -- apply -f first-deployment.yml` and `minikube kubectl -- apply -f first-service.yml` ![alt text](image-63.png)
-4.  Noted Minikube's IP address with `minikube ip` ![alt text](image-64.png)
-5.  Replaced the try_files line with a proxy pass line in Nginx's sites-available/default file so it looked like this ![alt text](image-65.png)
-6.  Verified the syntax was okay with `sudo nginx -t` ![alt text](image-66.png)
+2. Created manifest files for an Nginx deployment (with 5 replicas using the *daraymonsta/nginx-257:dreamteam* image) and service (a NodePort service using port 30001) ([both found here](<Day 3 three apps task/First app>))
+3. Created the above resources with `minikube kubectl -- apply -f first-deployment.yml` and `minikube kubectl -- apply -f first-service.yml` ![`alt text`](images/image-63.png)
+4.  Noted Minikube's IP address with `minikube ip` ![`alt text`](images/image-64.png)
+5.  Replaced the *try_files* line with a *proxy_pass* line in Nginx's *sites-available/default* file so it looked like this ![`alt text`](images/image-65.png)
+6.  Verified the syntax was okay with `sudo nginx -t` ![`alt text`](images/image-66.png)
 7.  Reloaded Nginx with `sudo systemctl reload nginx`
-8.  In my browser, navigated to this EC2's public IP and verified that the app was running ![alt text](image-67.png) 
+8.  In my browser, I navigated to this EC2's public IP and verified that the app was running ![`alt text`](images/image-67.png) 
 
 ### Second app
 
-1. Created [*second-deployment.yml*](<Day 3 three apps task/Second app/second-deployment.yml>)
-2. Applied with `minikube kubectl -- apply -f second-deployment.yml` ![alt text](image-69.png)
-3. Created [*second-service.yml*](<Day 3 three apps task/Second app/second-service.yml>)
-4. Applied with `minikube kubectl -- apply -f second-service.yml` ![alt text](image-68.png)
-5. Added a new *server* block to Nginx's default file ![alt text](image-71.png)
-6. Verified the syntax was okay with `sudo nginx -t` ![alt text](image-72.png)
+1. Created the [*second-deployment.yml*](<Day 3 three apps task/Second app/second-deployment.yml>) manifest file for a deployment (with 2 replicas using the *daraymonsta/tech201-nginx-auto:v1* image)
+2. Created these resources with `kubectl -- apply -f second-deployment.yml` ![`alt text`](images/image-69.png)
+3. Created a [*second-service.yml*](<Day 3 three apps task/Second app/second-service.yml>) manifest file for a LoadBalancer service (using port 30002)
+4. Created this service with `kubectl -- apply -f second-service.yml` ![`alt text`](images/image-68.png)
+5. Added a new *server* block to Nginx's default file to create a reverse proxy for this app ![`alt text`](images/image-71.png)
+6. Verified the syntax was okay with `sudo nginx -t` ![`alt text`](images/image-72.png)
 7. Reloaded Nginx with `sudo systemctl reload nginx`
-8. Ran `minikube tunnel` ![alt text](image-70.png)
+8. In a separate terminal window, I ran `minikube tunnel` and kept this process running throughout this task and the next ![`alt text`](images/image-70.png)
   - This is to create a tunnel between the EC2 and the service that is running in the Minikube cluster, which allows traffic external to the Minikube cluster to reach the NodePort via the LoadBalancer service
-9.  Verified this process was successful by navigating to http://3.255.194.90:9000/ ![alt text](image-73.png)
+9.  Verified this process was successful by navigating to http://3.255.194.90:9000/ in a browser ![`alt text`](images/image-73.png)
 
 ### Third deployment
 
-1. Ran `sudo snap install kubectl --classic` to enable me to install `kubectl` and follow the steps on [the hello-minikube tutorial](https://kubernetes.io/docs/tutorials/hello-minikube/) ![alt text](image-74.png)
-2. Ran `kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080` ![alt text](image-75.png)
-3. Verified that the deployment was created with `kubectl get deployments` ![alt text](image-76.png)
-4. Verified that the pod had been created with `kubectl get pods` ![alt text](image-77.png)
-5. Exposed the pod to port 8080 with `kubectl expose deployment hello-node --type=LoadBalancer --port=8080` ![alt text](image-78.png)
-6. Verified that the service had been created with `kubectl get services` ![alt text](image-79.png)
-7. Ran `minikube service hello-node` ![alt text](image-80.png) (normally this would open a browser window to serve the app, but it didn't because I don't have a browser on this VM)
-8. Ran curl command to verify the app was running on the URL in above command's output ![alt text](image-81.png)
-9. Edited my Nginx *default file* to add a new `location` block under the server listening on port 80 (which contained the reverse proxy for the first app) (see here for full file[text](<nginx default>)) ![alt text](image-108.png)
-10. Ran `sudo nginx -t` and `sudo systemctl restart nginx` and verified this configuration was working on the browser ![alt text](image-109.png)
+1. Ran `sudo snap install kubectl --classic` to enable me to install `kubectl` and follow the steps on [the hello-minikube tutorial](https://kubernetes.io/docs/tutorials/hello-minikube/) ![`alt text`](images/image-74.png)
+2. Ran `kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- /agnhost netexec --http-port=8080` ![`alt text`](images/image-75.png)
+3. Verified that the deployment was created with `kubectl get deployments` ![`alt text`](images/image-76.png)
+4. Verified that the pod had been created with `kubectl get pods` ![`alt text`](images/image-77.png)
+5. Exposed the pod to port 8080 with a LoadBalancer service via `kubectl expose deployment hello-node --type=LoadBalancer --port=8080` ![`alt text`](images/image-78.png)
+6. Verified that the service had been created with `kubectl get services` ![`alt text`](images/image-79.png)
+7. Ran `minikube service hello-node` ![`alt text`](images/image-80.png) (normally this would open a browser window to serve the app, but it didn't because I don't have a browser installed on this VM)
+8. Ran a `curl` command to verify that the app was running on the URL in above command's output ![`alt text`](images/image-81.png)
+9. Edited my Nginx *default file* to add a new `location` block under the server listening on port 80 (which contained the reverse proxy for the first app; [see here for the full file](<nginx default>)) ![`alt text`](images/image-108.png)
+10. Ran `sudo nginx -t` and `sudo systemctl restart nginx` and verified that this was working on the browser ![`alt text`](images/image-109.png)
 11. After this, I cleaned up all the resources by running `kubectl delete all --all --namespace default`
 
 ## Use Kubernetes to deploy the Sparta test app in the cloud
 
 - For this task, I created a new EC2 named *tech501-farah-kubernetes-2tier-minikube-ec2*
 
-1. Created the deployment files ([the exact same files that were used in the Day 2 task](k8s-yaml-definitions/local-nodejs20-app-deploy))
+1. Created the deployment manifest files ([the exact same files that were used in the Day 2 2-tier deployment task](k8s-yaml-definitions/local-nodejs20-app-deploy))
 2. Ran `kubectl apply -f` on all of the above files
-3. Configured the Nginx reverse proxy using Minikube's IP ![alt text](image-85.png)
-4. Verified that the app and the */posts* page were working on the browser ![alt text](image-84.png)
-![alt text](image-86.png)
-5. Created a HPA with `kubectl autoscale deployment sparta-app-deployment --cpu-percent=5 --min=2 --max=10` ![alt text](image-87.png)
-6. Verified it was running with `kubectl get hpa` ![alt text](image-88.png)
+3. Configured the Nginx reverse proxy using Minikube's IP ![`alt text`](images/image-85.png)
+4. Verified that the app and the */posts* page were working on the browser ![`alt text`](images/image-84.png)
+![`alt text`](images/image-86.png)
+5. Created a HPA with `kubectl autoscale deployment sparta-app-deployment --cpu-percent=5 --min=2 --max=10` ![`alt text`](images/image-87.png)
+6. Verified it was running with `kubectl get hpa` ![`alt text`](images/image-88.png)
 7. Installed Apache Benchmark with `sudo apt install apache2-utils` 
-   -  I then verified that it was installed with `ab -V` ![alt text](image-89.png) 
+   -  I then verified that it was installed with `ab -V` ![`alt text`](images/image-89.png) 
 8. Ran a load-testing command `ab -n 6000 -c 100 http://54.194.91.154/`
-9. Watched the CPU activity with `kubectl get hpa -w` ![alt text](image-93.png)
-10. Verified that new pods were being created with `kubectl get pods` ![alt text](image-95.png)
-   - and also with `kubectl describe deployment sparta-app-deployment` (note the mentions of "Scaled up") ![alt text](image-94.png)
-11. I waited a little while for the cooldown period to be over (which seemed to be around 9 minutes after the scaled pods were created) so that the HPA started scaling down again, which I verified with `kubectl describe deployment sparta-app-deployment` ![alt text](image-96.png)
-   - I also verified this by running `kubectl get pods` and noting that I now only had 2 app pods, which is what was expected (again, given that HPA minimums take precedence over the number of replicas defined in my deployment file) ![alt text](image-98.png)
+9. Watched the CPU activity with `kubectl get hpa -w` ![`alt text`](images/image-93.png)
+10. Verified that new pods were being created with `kubectl get pods` ![`alt text`](images/image-95.png)
+   - and also with `kubectl describe deployment sparta-app-deployment` (note the mentions of "Scaled up") ![`alt text`](images/image-94.png)
+11. I waited a little while for the HPA's cooldown period to be over (which seemed to be around 9 minutes after the scaled pods were created) so that the HPA started scaling down again, which I verified with `kubectl describe deployment sparta-app-deployment` ![`alt text`](images/image-96.png)
+   - I also verified this by running `kubectl get pods` and noting that I only had 2 app pods, which is what was expected (again, given that HPA minimums take precedence over the number of replicas defined in my deployment file) ![`alt text`](images/image-98.png)
 12. To make Minikube start on the reboot of my instance, I created this file [*/etc/systemd/system/minikube.service*](<Day 3 Sparta app task/minikube.service>)
 13. I then ran the following commands to put it into action:
 ```
@@ -369,18 +359,18 @@ sudo systemctl enable minikube
 sudo systemctl restart minikube
 sudo systemctl status minikube
 ```
-14.  After verifying that the app was still accessible on the browser at this point, I rebooted the VM, logged in, and ran `sudo systemctl status minikube` ![alt text](image-102.png)
-15.  I also ran `minikube status` to verify that each component was running successfully ![alt text](image-97.png)
-16. I then verified that my app was available on the browser ![alt text](image-103.png) ![alt text](image-104.png)
-![alt text](image-105.png)
-17. I then stopped the VM, started it again, and after giving it a few minutes for everything to start up without logging in, I verified that my app was working on the browser again (note the new IP address as the URL) ![alt text](image-106.png) ![alt text](image-107.png)
+14. After verifying that the app was still accessible on the browser at this point, I rebooted the VM, logged in again, and ran `sudo systemctl status minikube` ![`alt text`](images/image-102.png)
+15. I also ran `minikube status` to verify that each component was running successfully ![`alt text`](images/image-97.png)
+16. I then verified that my app was available on the browser ![`alt text`](images/image-103.png) ![`alt text`](images/image-104.png)
+![`alt text`](images/image-105.png)
+17. I then stopped the VM, started it again, and after giving it a few minutes for everything to start up without logging in this time, I verified that my app was working on the browser again (note the new IP address as the URL, indicating the EC2 was rebooted) ![`alt text`](images/image-106.png) ![`alt text`](images/image-107.png)
   
 ## **Blockers**
 
-1. For the [third app deployment task](#third-deployment), I had an issue working out how to point the third app to *<public IP>/hello*, so initially I only got this far before I realised I could add a new `location` block under the server listening on port 80: ![alt text](image-82.png) which output ![alt text](image-83.png)
-2. I had issues with the Metrics Server not being ready (note that commands like `kubectl top nodes` also didn't work because of this) ![alt text](image-92.png)
-   - so I ran `kubectl logs -n kube-system metrics-server-6f7dd4c4c4-lfq48` and saw this apparently common error when using Minikube ![alt text](image-91.png)
-   - to resolve,this, I ran `kubectl edit deployment metrics-server -n kube-system` and added `- --kubelet-insecure-tls` under `spec.containers.args` — once the old Metrics Server was deleted, a new one was created, and then commands like `kubectl top nodes` worked ![alt text](image-90.png)
+1. For the [third app deployment task](#third-deployment), I had an issue working out how to point the third app to *<public IP>/hello*, so initially I only got this far before I realised I could add a new `location` block under the server listening on port 80: ![`alt text`](images/image-82.png) which output ![`alt text`](images/image-83.png)
+2. I had issues with the Metrics Server not being ready (note that commands like `kubectl top nodes` also didn't work because of this) ![`alt text`](images/image-92.png)
+   - so I ran `kubectl logs -n kube-system metrics-server-6f7dd4c4c4-lfq48` and saw this apparently common error when using Minikube ![`alt text`](images/image-91.png)
+   - to resolve,this, I ran `kubectl edit deployment metrics-server -n kube-system` and added `- --kubelet-insecure-tls` under `spec.containers.args` — once the old Metrics Server was deleted, a new one was created, and then commands like `kubectl top nodes` worked ![`alt text`](images/image-90.png)
 3. On my first attempt to enable Minikube, I didn't use `Type=oneshot` or the `Wants:` field, and my `After:` and `Requires` fields only contained `docker.service`
   - when rebooting the VM, this seemed to cause issues as I received connection refusals and lots of errors about conflicts/context changes when running any `kubectl` commands, so to undo this step, I ran:
 ```
@@ -400,15 +390,17 @@ minikube status
 
 # What I learnt
 
-- I learnt about how 
+- I learnt about Kubernetes's architecture and how the objects relate to one another
+- I learnt how powerful Kubernetes is for automating DevOps tasks
 
 # Benefits I personally saw from the project
 
-- 
-
+- I appreciate that K8s handles all of the scaling to meet traffic demands
+- I like that it can self-heal in case something goes wrong with a pod
+- I understood more about the benefits of using Kubernetes in tandem with a tool like Docker
 
 ## Helpful links
 
 - [My notes on K8s commands are here](Commands.md)
-- Guide on [which K8s API version to use](https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html) depending on the kind of object
+- [Guide on which K8s API version to use](https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html) depending on the kind of object
 - [Official Kubernetes documentation](https://kubernetes.io/docs/home/)
