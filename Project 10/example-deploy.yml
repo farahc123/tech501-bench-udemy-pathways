@@ -1,0 +1,26 @@
+apiVersion: apps/v1 # specifies the K8s API version to be used when creating this object; apps is used for deployments because it handles higher-level app management resources
+kind: Deployment # defines the type of kubernetes object to be created
+metadata:
+  name: example-deployment # sets the deployment name, which is how it will be referred to in kubectl commands
+  labels: # key-value pairs attached to objects; used to organise objects into subsets
+    app: example-app # sets the label/tag for the deployment
+spec: # describes the desired state of the deployment
+  replicas: 1 # number of identical pods that should be running in this deployment; was originally 3 at start of task
+  strategy:
+    type: RollingUpdate # a strategy that allows the deployment to update pods at a controlled speed and with controlled application availability
+    rollingUpdate: # if you skip this block, this strategy is still used as it's the default, but the values will be at 25% max unavailable and 25% max surge
+      maxUnavailable: 2 # the maximum number of pods that can be unavailable during the update process
+      maxSurge: 3 # the maximum number of pods that can be created above the desired number of pods
+  selector: # a mechanism to filter pods based on labels/tags so the deployment knows which pods it should manage
+    matchLabels: # tells the deployment to manage pods that match the below label/tag
+      app: example # specifies that all pods with the app=example label/tag should be managed
+  template: # defines the pod specification, which the deployment uses when creating new pods
+    metadata:
+      labels:
+        app: example # label/tag for pod; these MUST match the selector labels in the deployment spec
+    spec: # specifies the desired state of the pod
+      containers: # a list of container(s) to be run in the pod
+      - name: example # sets the container name
+        image: exampleuser/example:v1 # image to be pulled from docker hub
+        ports: # a list of ports that the container will expose
+        - containerPort: 80 # HTTP port

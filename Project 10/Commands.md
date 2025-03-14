@@ -11,6 +11,7 @@
 
 - `kubectl version` -- prints the version of kubectl currently installed
 - `kubectl cluster-info` -- verifies the control plane is running
+- `kubectl explain <resource name>` -- outputs helpful information about the fields used in a given resource, e.g. `apiVersion` or `pods.spec.containers`
 - `kubectl get namespaces` -- lists all namespaces in the cluster
 - `kubectl get nodes` -- lists all nodes in the cluster (e.g. for Minikube, there will only be one)
   - `kubectl get nodes -o wide` -- lists the nodes with more detail (note that this command format can be used for all resource types)
@@ -30,7 +31,6 @@
   - `kubectl get all -l <label selector key=label selector value as defined in yaml file>` -- lists details on the resources matching the key=value set in the command
 - `kubectl config current-context` -- tells you what context you're connected to
 - `kubectl config use-context <context name>` -- switches to given context
-
 - `kubectl logs <resource name>` -- outputs logs for a given resource
   - `kubectl logs -f <resource name>` -- allows you to follow a resource's logs in real-time
   - `kubectl logs <pod name> -c <container name>` -- outputs logs for a given container in a given pod
@@ -58,7 +58,8 @@
 - `kubectl exec -it <pod name> -- /bin/bash` -- runs an interactive shell in the given pod using the above shell type (which can be changed)
 - `kubectl label pods <pod name> <label name>=<label value>` -- applies a key-value pair as a label to a given pod 
 - `kubectl label pods <pod name> <label name>-` -- removes the given label (note the minus symbol after the label name) from a given pod
-- kubectl port-forward svc/<name of service> <local port>:<target port>
+- `kubectl port-forward svc/<name of service> <local port>:<target port>` -- forwards traffic from a local port to a target port; this is done by a service if these values have been set, so this is more of an ad-hoc way of doing it temporarily (e.g. for testing)
+- `kubectl set image <deployment/pod/select other resources> <resource name> <container name>=<new image:version>` -- sets the image used for a pod/resource etc. to the given image; [see more here for resources that this command can be used with](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_set/kubectl_set_image/)
 
 
 ## HPA-related commands
@@ -72,8 +73,8 @@
 
 - `kubectl rollout status deployment <deployment name>` -- -- gives you the status of rollouts (i.e. updates) to a deployment (can also be used on DaemonSets and StatefulSets)
 - `kubectl rollout restart deployment <deployment name>` -- stops the current rollout and restarts it (useful if more changes have been made during the original rollout)
-- `kubectl rollout undo deployment <deployment name>` -- undoes the last rollout of a deployment, i.e. reverts to the previous revision (this is a form of K8s version control)
-  - `kubectl rollout undo deployment <deployment name --to-revision=<revision number>` -- reverts a deployment to the given rollout/revision number
+- `kubectl rollout undo deployment <deployment name>` -- undoes the last rollout of a deployment, i.e. reverts to the previous revision (this is K8s version control in action)
+  - `kubectl rollout undo deployment <deployment name --to-revision=<revision number>` -- reverts a deployment to the given rollout/revision number with zero downtime
 - `kubectl rollout pause deployment <deployment name>` -- pauses a rollout of a deployment
 - `kubectl rollout resume deployment <deployment name>` -- resumes the rollout of a deployment
 - `kubectl rollout history deployment <deployment name>` -- lists past deployment rollouts and their details
