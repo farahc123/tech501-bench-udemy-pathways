@@ -62,7 +62,7 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 ## Kubernetes
 
 - **Kubernetes (or K8s)**: an open-source container orchestration system that automates the deployment, scaling, and management of apps running in containers
-- It's helpful when managing because it can self-heal pods, automatically scale resources to meet changing needs based on traffic, and it can apply updates to apps with zero down-time
+- It's helpful because it can self-heal pods, automatically scale resources to meet changing needs based on traffic, and it can apply updates to apps with zero down-time using Rollout Strategies
 - It can automate:
   - starting new apps when needed
   - restarting apps if they crash
