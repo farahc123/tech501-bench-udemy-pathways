@@ -65,6 +65,7 @@
 - So unlike VMs, containers don't include OSes
 - these containers operate in isolated environments, so they run independently from the infrastructure they're deployed into
 - **Images**: pre-built packages containing everything needed to run an application, including the code, dependencies, and configuration
+- **Volumes**: they persistently store data for containers beyond their lifecycle; these can be easily backed up, restored, and shared between containers
 
 ### Benefits of virtualisation vs containerisation
 
