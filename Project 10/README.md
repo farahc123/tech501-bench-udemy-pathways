@@ -6,6 +6,8 @@
   - [Prerequisites](#prerequisites)
 - [**Research**](#research)
   - [Kubernetes](#kubernetes)
+    - [Managed K8s services](#managed-k8s-services)
+    - [Container security](#container-security)
     - [Kubernetes objects](#kubernetes-objects)
     - [Lifecycle](#lifecycle)
     - [Autoscaling](#autoscaling)
@@ -53,12 +55,6 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 
 # **Research**
 
-- success stories
-- pros and cons of using managed service vs launching your own
-- how to mitigate security concerns with containers
-- what are maintained images
-  - pros and cons of using them for base container image
-
 ## Kubernetes
 
 - **Kubernetes (or K8s)**: an open-source container orchestration system that automates the deployment, scaling, and management of apps running in containers
@@ -68,6 +64,10 @@ The goal of this project is to containerise the deployment of the Sparta test ap
   - restarting apps if they crash
   - spreading out work so that no one part of the system is overloaded
   - scaling up or down based on demand
+- Companies that use K8s:
+  - Spotify
+  - Booking.com
+  - Netflix
 - **Cluster**: a Kubernetes environment, which includes one or more nodes; has two elements:
   - **Control Plane or master/control node**: master node; the centralised brain of a cluster; governs and coordinates the cluster's operations, schedules new containers onto nodes, monitors the cluster's health, and provides an API that we interact with
   - **Data plane**: made up of worker nodes and their pods; carries out the policies set on the Control Plane
@@ -84,6 +84,37 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 - **Manifest file**: a YAML file that describes the desired state of the K8s objects you want to create/manage (i.e. it's declarative) and can be reused across environments; you can group multiple related resources in one file and delineate them with `---`, but I have separated them; these resources are then created with a `kubectl apply -f <file path>` command
 - **Minikube**: a development/learning tool that allows you to run a single-node K8s cluster on your local machine
 - **Ingress**: if you  have multiple services that need to be accessed via the same external IP, this add-on routes traffic to a service based on hostnames or paths; [see example here](example-ingress.yml)
+
+
+### Managed K8s services
+
+- a paid service in which a third party (e.g. EKS, AKS, GKE) handles the lifecycle of Kubernetes clusters to simplify containerised environments for the client
+- **Benefits of using a managed K8s service**:
+  - reduced need for in-house expertise, which is usually required when you're running a K8s environment at scale
+  - frees up teams from configuring/managing K8s so they can focus less on the infrastructure and more on the product
+  - usually offer enhanced security protocols
+- **Downsides of using a managed K8s service:**
+  - they come with an added cost
+  - you may have less control over some aspects of the cluster environment
+
+### Container security
+
+- you should store contained on secure registries/repositories with access control, otherwise they can be modified, deleted, or be subject to data breaches
+- you should also sign images e.g. through Docker Content Trust or Notary to verify your images
+- use vulnerability scanners on images
+- to reduce attack surfaces, you should include only the components the application needs in the container
+- use trustworthy (e.g. official/maintained) images
+- isolate container networks
+- **Pros of using maintained images as base container images**:
+  - reliable
+  - have clear documentation
+  - best practices are usually implemented already
+  - easy to pull
+- **Cons**:
+  - less flexibility in terms of customisation
+  - you have no control over their size (e.g. if you only need some features), which can increase performance overhead
+  - you may become too dependent on the developer which could introduce issues in the long run
+  - if you're deploying at scale, there may be costs incurred
 
 **Kubernetes architecture diagrams by Labex:**
 ![`alt text`](images/image-2.png)
@@ -115,9 +146,9 @@ The goal of this project is to containerise the deployment of the Sparta test ap
 
 ### Lifecycle
 
-1. When a new app is deployed, the Control Plane places the Pods on appropriate Nodes
-2. the kubelet on each Node ensures the Pods are healthy and running as instructed
-3. Services route traffic to the correct Pods, allowing clients to access apps
+1. When a new app is deployed, the Control Plane places the pods on appropriate nodes
+2. The kubelet on each node ensures the pods are healthy and running as instructed
+3. Services route traffic to the correct pods, allowing clients to access apps
 
 ### Autoscaling
 
