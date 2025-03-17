@@ -3,6 +3,7 @@
 - [Docker commands](#docker-commands)
   - [docker run options](#docker-run-options)
   - [General commands](#general-commands)
+  - [Volume-related commands](#volume-related-commands)
   - [Dockerfile commands](#dockerfile-commands)
   - [Network-related commands](#network-related-commands)
   - [Logs](#logs)
@@ -63,7 +64,16 @@
 - `docker create <image>` — creates a new container from the given image
 - `docker history <image name>` outputs history of image layers and their sizes
 - `docker cp <file name on host machine> <container name>:<path on container to be copied to>` — copies a file from host machine to docker container
-`docker stats <container name>` — outputs a live stream of resource usage statistics for given container
+- `docker stats <container name>` — outputs a live stream of resource usage statistics for given container
+
+
+## Volume-related commands
+
+- `docker volume create <volume name>` — creates a volume to persistently store data for containers beyond their lifecycle; these can be easily backed up, restored, and shared between containers
+- ` docker volume ls` — outputs a list of Docker volumes
+- `docker volume inspect <volume name>` — outputs detailed info on a given volume
+- `docker volume rm <volume name>` — removes a given volume
+- `docker volume prune` — cleans up unused volumes
 
 ## Dockerfile commands
 
