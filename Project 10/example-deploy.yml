@@ -24,3 +24,6 @@ spec: # describes the desired state of the deployment
         image: exampleuser/example:v1 # image to be pulled from docker hub
         ports: # a list of ports that the container will expose
         - containerPort: 80 # HTTP port
+      - name: second-container
+        image: busybox # as an example, this is a simple image that can be used to run a shell
+        command: ["sh", "-c", "echo Hello from the sidecar!"] # a command to run in the container
