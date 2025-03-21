@@ -1,0 +1,5 @@
+To build the C++ based code, the following commands are required:
+
+apt-get update -y
+apt-get install -y build-essential
+g++ demo.cpp -o democode
