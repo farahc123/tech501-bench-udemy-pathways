@@ -12,7 +12,7 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 
 ## Prerequisites
 
-- A GitHub repo containing the app code with a *dev* and a *main* branch
+- [A GitHub repo containing the app code with a *dev* and a *main* branch](https://github.com/farahc123/tech501-sparta-app-CICD)
 - A Jenkins server
 - A target VM with the app already running via Minikube
 - A SonarQube server with a project for the app and a webhook set up to communicate with Jenkins
