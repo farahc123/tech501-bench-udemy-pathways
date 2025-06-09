@@ -18,9 +18,7 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 - A SonarQube server with a project for the app and a webhook set up to communicate with Jenkins
 - **Jenkins plugins**:
   - SSH Agent
-  - NodeJS
   - SonarQube
-  - Docker Pipeline
   - NodeJS (with version 20 installed under *Manage Jenkins>Tools*)
 - **Credentials loaded into Jenkins**:
   - Docker Hub username & password
