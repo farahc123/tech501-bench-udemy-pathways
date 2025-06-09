@@ -8,7 +8,7 @@
 
 ## Goal of the project
 
-The goal of this project is to implement a CI/CD pipeline for efficient software delivery. The pipeline will run on Jenkins and use SonarQube, Docker, and Kubernetes for the automated integration, code-scanning, deployment, and management of a containerised application already running via Minikube on an EC2.
+The goal of this project is to implement a CI/CD pipeline for efficient software delivery. The pipeline will run on Jenkins and use SonarQube, Docker, and Kubernetes for the automated integration, code-scanning, deployment, and management of a containerised application already running via Minikube on an EC2. Upon completion of the pipeline, a notification will be sent to a Slack channel to update the DevOps team on the result.
 
 ## Prerequisites
 
@@ -16,15 +16,18 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 - A Jenkins server
 - A target VM with the app already running via Minikube
 - A SonarQube server with a project for the app and a webhook set up to communicate with Jenkins
+- A Slack account & channel where notifications will be sent, with a token generated for Jenkins via the Slack's Jenkins integration
 - **Jenkins plugins**:
   - SSH Agent
   - SonarQube
   - NodeJS (with version 20 installed under *Manage Jenkins>Tools*)
+  - Slack Notifications (with workspace and default channel set under *Manage Jenkins>Tools*)
 - **Credentials loaded into Jenkins**:
   - Docker Hub username & password
   - SonarQube token
   - GitHub SSH key
   - SSH key for the target VMs
+  - Slack 
 
 ## Diagram of pipeline
 
@@ -46,3 +49,4 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
    7. Jenkins logs into Docker using the provided credentials
    8. The Docker image is pushed to Docker Hub
    9. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
+4.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result

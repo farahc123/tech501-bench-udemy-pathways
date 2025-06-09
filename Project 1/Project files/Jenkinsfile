@@ -1,3 +1,10 @@
+def COLOR_MAP = [
+    SUCCESS: 'good',
+    FAILURE: 'danger',
+    UNSTABLE: 'warning',
+    ABORTED: 'warning'
+]
+
 pipeline {
     agent any
 
@@ -69,7 +76,7 @@ pipeline {
                         git config user.email "jenkins@example.com"
                         git config user.name "Jenkins"
                         git checkout main
-                        git pull origin main --rebase // to avoid merge conflicts
+                        git pull origin main --rebase
                         git merge dev --no-ff -m "Merged dev to main via Jenkins pipeline"
                         git remote set-url origin git@github.com:farahc123/tech501-sparta-app-CICD.git
                         git push origin main
@@ -143,5 +150,11 @@ EOF
         failure {
             echo "Pipeline failed."
         }
-    }
+        always {
+            echo 'Slack notifications'
+            slackSend channel: '#devopscicd',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build # ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+}
 }
