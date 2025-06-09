@@ -1,39 +1,50 @@
 # Project 1
 
 - [Project 1](#project-1)
-    - [Goal of the project](#goal-of-the-project)
-    - [Initial steps](#initial-steps)
-  - [Practice job 1](#practice-job-1)
-    - [Old notes](#old-notes)
+  - [Goal of the project](#goal-of-the-project)
+  - [Prerequisites](#prerequisites)
+  - [Diagram of pipeline](#diagram-of-pipeline)
+  - [Pipeline steps overview](#pipeline-steps-overview)
 
-### Goal of the project
+## Goal of the project
 
-The goal of this project is to implement a CI/CD pipeline utilising AWS or Azure services for efficient software delivery. The system should use Jenkins, Docker, and Kubernetes for automated deployment and management of containerised applications.
+The goal of this project is to implement a CI/CD pipeline for efficient software delivery. The pipeline will run on Jenkins and use SonarQube, Docker, and Kubernetes for the automated integration, code-scanning, deployment, and management of a containerised application already running via Minikube on an EC2.
 
-### Initial steps
+## Prerequisites
 
-1. I created a t3.micro EC2 Jenkins server with the usual network settings (open on ports 80, 8080, 22, and 3000)
-2. I installed Jenkins as usual by following [these steps](https://phoenixnap.com/kb/install-jenkins-ubuntu)
-3. Logged into the EC2 and installed Docker
-4. I logged into the Jenkins server on *<EC2 public IP>:8080* and installed the NodeJS, SSH Agent, Docker, and Kubernetes plugins
-5. I added SSH credentials to Jenkins for my GitHub and Minikube EC2 instance
-6. I added my Docker login credentials to Jenkins 
+- A GitHub repo containing the app code with a *dev* and a *main* branch
+- A Jenkins server
+- A target VM with the app already running via Minikube
+- A SonarQube server with a project for the app and a webhook set up to communicate with Jenkins
+- **Jenkins plugins**:
+  - SSH Agent
+  - NodeJS
+  - SonarQube
+  - Docker Pipeline
+  - NodeJS (with version 20 installed under *Manage Jenkins>Tools*)
+- **Credentials loaded into Jenkins**:
+  - Docker Hub username & password
+  - SonarQube token
+  - GitHub SSH key
+  - SSH key for the target VMs
 
-- I approached this project breaking each stage up into an isolated job that I could get working on its own on my local machine before merging them and running them on a Jenkins EC2 instance 
+## Diagram of pipeline
 
-http://54.246.228.210:8080/
+![Jenkins CICD pipeline](<jenkins-cicd-pipeline-project1.png>)
 
-## Practice job 1
+## Pipeline steps overview
 
-- On my local machine, I created a pipeline script job that would build my Sparta app from a Dockerfile located in the nodejs-sparta-app folder (which contained the build context folder of /app) and push it to my dockerhub using my credentials
-- [Pipeline script here](<Files/pipeline file>)
-- This worked ![alt text](image-1.png)
-- Proof from Docker Hub ![alt text](image-2.png)
+[**Full pipeline available to view here**](<Project files/Jenkinsfile>)
 
-
-
-### Old notes
-1. I created a freestyle job to test my GitHub code (and set up a webhook on my GitHub repo)
-2. I created a freestyle job to merge my GitHub code
-   - These two jobs worked ![alt text](image.png)
-3. I created a pipeline to do the rest of the jobs
+1. Credentials for Docker Hub, GitHub, and the SSH key for the target VM are stored as variables that can be referenced throughout the entire pipeline in the `environment` block
+2. NodeJS version 20 is specified in the `tools` block
+3. **Stages**:
+   1. The code is checked out from the *dev* branch of the GitHub repo using the credentials stored as an environment variable
+   2. The *app* folder is set as the working directory, and tests are run on the code
+   3. The code is scanned by the SonarQube server, where it is stored as a project called *sparta-app*
+   4. The results of the scan are compared to the quality gate conditions (in this case, SonarQube's default quality gate is used)
+   5. Provided the above stages run successfully, the tested code is merged to the *main* branch of the GitHub repo
+   6. The Docker image is built, with the build number of the Jenkins pipeline being passed as the image tag
+   7. Jenkins logs into Docker using the provided credentials
+   8. The Docker image is pushed to Docker Hub
+   9. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
