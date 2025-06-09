@@ -31,7 +31,7 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 
 ## Diagram of pipeline
 
-![Jenkins CICD pipeline](<jenkins-cicd-pipeline-project1.png>)
+![Jenkins CICD pipeline](<jenkins-cicd-pipeline-project1.jpg>)
 
 ## Pipeline steps overview
 
