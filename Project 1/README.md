@@ -14,7 +14,7 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 
 - [A GitHub repo containing the app code with a *dev* and a *main* branch](https://github.com/farahc123/tech501-sparta-app-CICD)
 - A Jenkins server
-- A target VM with the app already running via Minikube
+- A target VM with the app already running via Minikube, which references [an image stored on Docker Hub](https://hub.docker.com/repository/docker/farahc123/sparta-app/)
 - A SonarQube server with a project for the app and a webhook set up to communicate with Jenkins
 - A Slack account & channel where notifications will be sent, with a token generated for Jenkins via the Slack's Jenkins integration
 - **Jenkins plugins**:
