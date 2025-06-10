@@ -1,6 +1,6 @@
-# Project 1
+# Project 1: Jenkins CICD pipeline
 
-- [Project 1](#project-1)
+- [Project 1: Jenkins CICD pipeline](#project-1-jenkins-cicd-pipeline)
   - [Goal of the project](#goal-of-the-project)
   - [Prerequisites](#prerequisites)
   - [Diagram of pipeline](#diagram-of-pipeline)
@@ -42,17 +42,17 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 2. The pipeline starts, with credentials for Docker Hub, GitHub, and the SSH key for the target VM stored as variables that can be referenced throughout the entire pipeline in the `environment` block
 3. NodeJS version 20 is specified in the `tools` block
 4. **Stages**:
-   1. A notification is sent to the *#devopscicd* Slack channel informing the DevOps team that the pipeline has been started
+   1. A notification is sent to the *#devopscicd* Slack channel informing the DevOps team that the pipeline has been started ![`Pipeline started Slack notification`](images/image-3.png)
    2. The code is checked out from the *dev* branch of the GitHub repo using the credentials stored as an environment variable
    3. The *app* folder is set as the working directory, and tests are run on the code
-   4. The code is scanned by the SonarQube server, where it is stored as a project called *sparta-app*
+   4. The code is scanned by the SonarQube server, where it is stored as a project called *sparta-app* ![`SonarQube project`](images/image-4.png)
    5. The results of the scan are compared to the quality gate conditions (in this case, SonarQube's default quality gate is used)
    6. Provided the above stages run successfully, the tested code is merged to the *main* branch of the GitHub repo
    7. The Docker image is built, with the build number of the Jenkins pipeline being passed as the image tag
    8. Jenkins logs into Docker using the provided credentials
-   9. The Docker image is pushed to Docker Hub
-   10. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
-5.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result
+   9. The Docker image is pushed to Docker Hub ![`Docker Hub`](images/image-5.png)
+   10. The Docker image used in the existing Kubernetes deployment (running on Minikube on the target VM) is updated
+5.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result ![`Build result Slack notification`](images/image-6.png)
 
 ## Demonstration
 
