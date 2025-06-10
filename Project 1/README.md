@@ -53,7 +53,6 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
    9. The Docker image is pushed to Docker Hub
    10. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
 5.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result
-6.  
 
 ## Demonstration
 
