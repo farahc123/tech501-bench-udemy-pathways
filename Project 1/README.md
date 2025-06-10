@@ -37,9 +37,10 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 
 [**Full pipeline available to view here**](<Project files/Jenkinsfile>)
 
-1. Credentials for Docker Hub, GitHub, and the SSH key for the target VM are stored as variables that can be referenced throughout the entire pipeline in the `environment` block
-2. NodeJS version 20 is specified in the `tools` block
-3. **Stages**:
+1. Outside of the pipeline, a colour map function is first defined that will be used in the post-build Slack notification step 
+2. The pipeline starts, with credentials for Docker Hub, GitHub, and the SSH key for the target VM stored as variables that can be referenced throughout the entire pipeline in the `environment` block
+3. NodeJS version 20 is specified in the `tools` block
+4. **Stages**:
    1. A notification is sent to the *#devopscicd* Slack channel informing the DevOps team that the pipeline has been started
    2. The code is checked out from the *dev* branch of the GitHub repo using the credentials stored as an environment variable
    3. The *app* folder is set as the working directory, and tests are run on the code
@@ -50,4 +51,4 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
    8. Jenkins logs into Docker using the provided credentials
    9. The Docker image is pushed to Docker Hub
    10. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
-4.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result
+5.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result
