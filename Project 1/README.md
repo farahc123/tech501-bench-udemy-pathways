@@ -57,4 +57,4 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 
 ## Demonstration
 
-<video controls src="Jenkins CICD pipeline demo.mp4" title="Demonstration of Jenkins CICD pipeline"></video>
+[Watch the pipeline in action here](https://drive.google.com/file/d/1gbhnTFWePJzPanzyI-klSS1Bl8XEf1q_/view?usp=sharing)
