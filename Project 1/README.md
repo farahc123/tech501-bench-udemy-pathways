@@ -8,7 +8,7 @@
 
 ## Goal of the project
 
-The goal of this project is to implement a CI/CD pipeline for efficient software delivery. The pipeline will run on Jenkins and use SonarQube, Docker, and Kubernetes for the automated integration, code-scanning, deployment, and management of a containerised application already running via Minikube on an EC2. Upon completion of the pipeline, a notification will be sent to a Slack channel to update the DevOps team on the result.
+The goal of this project is to implement a CI/CD pipeline for efficient software delivery. The pipeline will run on Jenkins and use SonarQube, Docker, and Kubernetes for the automated integration, code-scanning, deployment, and management of a containerised application already running via Minikube on an EC2. When the pipeline is started, a notification will be sent to a Slack channel to inform the DevOps team, and upon its completion, another notification will be sent to update them on the build's result.
 
 ## Prerequisites
 
@@ -40,13 +40,14 @@ The goal of this project is to implement a CI/CD pipeline for efficient software
 1. Credentials for Docker Hub, GitHub, and the SSH key for the target VM are stored as variables that can be referenced throughout the entire pipeline in the `environment` block
 2. NodeJS version 20 is specified in the `tools` block
 3. **Stages**:
-   1. The code is checked out from the *dev* branch of the GitHub repo using the credentials stored as an environment variable
-   2. The *app* folder is set as the working directory, and tests are run on the code
-   3. The code is scanned by the SonarQube server, where it is stored as a project called *sparta-app*
-   4. The results of the scan are compared to the quality gate conditions (in this case, SonarQube's default quality gate is used)
-   5. Provided the above stages run successfully, the tested code is merged to the *main* branch of the GitHub repo
-   6. The Docker image is built, with the build number of the Jenkins pipeline being passed as the image tag
-   7. Jenkins logs into Docker using the provided credentials
-   8. The Docker image is pushed to Docker Hub
-   9. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
+   1. A notification is sent to the *#devopscicd* Slack channel informing the DevOps team that the pipeline has been started
+   2. The code is checked out from the *dev* branch of the GitHub repo using the credentials stored as an environment variable
+   3. The *app* folder is set as the working directory, and tests are run on the code
+   4. The code is scanned by the SonarQube server, where it is stored as a project called *sparta-app*
+   5. The results of the scan are compared to the quality gate conditions (in this case, SonarQube's default quality gate is used)
+   6. Provided the above stages run successfully, the tested code is merged to the *main* branch of the GitHub repo
+   7. The Docker image is built, with the build number of the Jenkins pipeline being passed as the image tag
+   8. Jenkins logs into Docker using the provided credentials
+   9. The Docker image is pushed to Docker Hub
+   10. The Docker image used the existing Kubernetes deployment (running on Minikube on the target VM) is updated
 4.  Post-build, a notification is sent to the *#devopscicd* Slack channel informing the DevOps team of the build's result
