@@ -29,15 +29,15 @@ module "ec2_db" {
   source               = "./modules/EC2/DB"
   ami_id               = var.ami_id
   db_instance_type     = var.db_instance_type
-  subnet_id            = module.vpc.private_subnet_id
+  subnet_id            = module.vpc.public_subnet_id
   security_group_id    = module.security_group_db.security_group_id
   ssh_key_name         = var.SSH_key_name
   db_instance_name     = var.db_instance_name
   db_public_ip_setting = var.db_public_ip_setting
 }
 
-module "ec2_app" {
-  source                = "./modules/EC2/app"
+module "asg_app" {
+  source                = "./modules/ASG"
   ami_id                = var.ami_id
   app_instance_type     = var.app_instance_type
   subnet_id             = module.vpc.public_subnet_id
@@ -45,4 +45,7 @@ module "ec2_app" {
   ssh_key_name          = var.SSH_key_name
   app_instance_name     = var.app_instance_name
   app_public_ip_setting = var.app_public_ip_setting
+  asg_min_size          = var.asg_min_size
+  asg_max_size          = var.asg_max_size
+  asg_desired_capacity  = var.asg_desired_capacity
 }
