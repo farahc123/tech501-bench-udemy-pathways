@@ -1,0 +1,6 @@
+[web]
+app_ec2_1 ansible_host=51.20.69.33 ansible_user=ubuntu ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/target-vm.pem
+app_ec2_2 ansible_host=13.60.48.151 ansible_user=ubuntu ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/target-vm.pem
+
+[db]
+db_ec2 ansible_host=13.49.226.110 ansible_user=ubuntu ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/target-vm.pem
