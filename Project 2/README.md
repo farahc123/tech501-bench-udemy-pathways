@@ -21,6 +21,8 @@
 ![adding tag to test versioning](image-9.png)
 ![new versions of tfstate file in S3 bucket](image-10.png)
 
+- note that the private subnet isn't being used as I don't have a bastion host
+
 ## GCP
 
 ![created compute engines](image-14.png)
@@ -33,6 +35,8 @@
 
 ![GCP bucket for backend](image-12.png)
 ![versions of tfstate file on GCP](image-13.png)
+
+- note that the private subnet isn't being used as I don't have a bastion host
 
 ## Different steps for setup in GCP
 
