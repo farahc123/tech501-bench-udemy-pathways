@@ -1,12 +1,12 @@
 # Commands
 
 - [Commands](#commands)
-  - [Kubectl query commands](#kubectl-query-commands)
-  - [Kubectl action commands](#kubectl-action-commands)
+  - [`kubectl` query commands](#kubectl-query-commands)
+  - [`kubectl` action commands](#kubectl-action-commands)
   - [Rollout (i.e. updating running resources) commands](#rollout-ie-updating-running-resources-commands)
   - [Minikube-related commands](#minikube-related-commands)
 
-## Kubectl query commands
+## `kubectl` query commands
 
 - `kubectl version` — prints the version of kubectl currently installed
 - `kubectl cluster-info` — verifies the control plane is running
@@ -39,7 +39,7 @@
 - `kubectl get endpoints` — lists the pod IP addresses and the ports attached to each running service
 - `kubectl get ingress` — lists details on existing ingresses
 
-## Kubectl action commands
+## `kubectl` action commands
 
 - `kubectl apply -f <YAML filename or URL>` — idempotent means of creating a Kubernetes object based on the specifications defined in the given YAML file (`-f` standing for file); if using a URL, it will download the file first then apply it; if you run this command multiple times on the same YAML file, it will only make any specified changes 
   - `kubectl apply -f .` — creates all of the Kubernetes objects defined in all of the YAML files in the current directory
@@ -71,8 +71,6 @@
 - `kubectl rollout pause deployment <deployment name>` — pauses a rollout of a deployment
 - `kubectl rollout resume deployment <deployment name>` — resumes the rollout of a deployment
 - `kubectl rollout history deployment <deployment name>` — lists past deployment rollouts and their details
-
-
 
 ## Minikube-related commands
 
