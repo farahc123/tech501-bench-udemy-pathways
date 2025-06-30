@@ -1,6 +1,6 @@
-# **Project 7: Bash scripting**
+# **Project 7: Bash scripting & images**
 
-- [**Project 7: Bash scripting**](#project-7-bash-scripting)
+- [**Project 7: Bash scripting \& images**](#project-7-bash-scripting--images)
   - [GitHub repo](#github-repo)
   - [Goal of the project](#goal-of-the-project)
   - [Diagram showing my automation workflow](#diagram-showing-my-automation-workflow)
