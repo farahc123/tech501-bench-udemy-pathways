@@ -11,8 +11,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY app/ .  
 
+# Installs dependencies
+RUN npm install
+
 # Exposes port 3000
 EXPOSE 3000
 
-# Sets startup command
-CMD ["npm", "start"]
+# Sets the startup command
+COPY start.sh .
+RUN chmod +x start.sh
+CMD ["./start.sh"]

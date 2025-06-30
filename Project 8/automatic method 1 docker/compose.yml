@@ -8,7 +8,6 @@ services:
       - "3000:3000"  # Exposes port 3000 for Sparta test app
     depends_on:
       - db
-    command: ["/bin/sh", "-c", "npm install && node seeds/seed.js && npm start"]
 
   db:
     image: mongo:latest

@@ -1,3 +1,4 @@
+# Uses the latest version of the Node.js image
 FROM node:latest
  
 # Sets working directory
