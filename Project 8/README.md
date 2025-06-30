@@ -1,6 +1,6 @@
-# **Udemy Project 8**
+# **Project 8: Ansible**
 
-- [**Udemy Project 8**](#udemy-project-8)
+- [**Project 8: Ansible**](#project-8-ansible)
   - [Goal of the project](#goal-of-the-project)
   - [GitHub repo](#github-repo)
   - [Installing Docker Desktop](#installing-docker-desktop)
@@ -109,6 +109,7 @@
   - they are cached, speeding up builds of similar images
   - when pushing or pulling images, only changed layers are transferred
 
+Diagram by Labex:
 ![alt text](images/image.png)
 
 ### Docker commands
