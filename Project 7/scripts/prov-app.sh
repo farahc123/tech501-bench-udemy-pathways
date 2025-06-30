@@ -3,7 +3,7 @@
 # Define log file
 LOG_FILE="/farah_custom_data.log"
 
-# Redirect stdout and stderr to the log file
+# Redirect output & errors to the log file
 exec > >(sudo tee -a "$LOG_FILE") 2>&1
 
 echo "Fetching the latest version of current packages..."

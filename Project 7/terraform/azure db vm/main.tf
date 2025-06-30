@@ -61,7 +61,7 @@ resource "azurerm_virtual_machine" "tech501-farah-tf-udemy-db-vm" {
       # Define log file
       LOG_FILE="/farah_custom_data.log"
 
-      # Redirect stdout and stderr to the log file
+      # Redirect output & errors to the log file
       exec > >(tee -a "$LOG_FILE") 2>&1
 
       # get updates of packages with no user input

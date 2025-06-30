@@ -29,7 +29,6 @@ resource "azurerm_network_interface" "tech501-farah-tf-udemy-app-vm-NIC" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  # Public IP provided below
   ip_configuration {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.public_subnet.id
@@ -38,7 +37,7 @@ resource "azurerm_network_interface" "tech501-farah-tf-udemy-app-vm-NIC" {
   }
 }
 
-# Settings for the machine itself
+# Config for the VM itself
 resource "azurerm_virtual_machine" "tech501-farah-tf-udemy-app-vm" {
   name                             = var.app_VM_name
   location                         = var.location
@@ -70,7 +69,7 @@ resource "azurerm_virtual_machine" "tech501-farah-tf-udemy-app-vm" {
       # Defines log file
       LOG_FILE="/farah_custom_data.log"
 
-      # Redirects stdout and stderr to the log file
+      # Redirects output & errors to the log file
       exec > >(tee -a "$LOG_FILE") 2>&1
 
       echo "Fetching the latest version of current packages..."

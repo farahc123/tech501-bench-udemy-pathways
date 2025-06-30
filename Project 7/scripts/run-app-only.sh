@@ -2,7 +2,7 @@
 
 LOG_FILE="/farah_running_app_only.log"
 
-# Use sudo to write to the log file
+# Redirect output & errors to the log file
 exec > >(sudo tee -a "$LOG_FILE") 2>&1
 
 echo "Changing directory to application folder..."

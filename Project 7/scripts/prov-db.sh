@@ -3,7 +3,7 @@
 # Define log file
 LOG_FILE="/farah_custom_data.log"
 
-# Redirect stdout and stderr to the log file
+# Redirect output & errors to the log file
 exec > >(sudo tee -a "$LOG_FILE") 2>&1
 
 # get updates of packages with no user input
@@ -39,15 +39,15 @@ sudo apt install -y mongodb-org=7.0.6 mongodb-org-database=7.0.6 mongodb-org-ser
 echo "Updating MongoDB bindIp setting to listen to all sources..."
 sudo sed -i 's/bindIp: 127.0.0.1/bindIp: 0.0.0.0/' /etc/mongod.conf
 
-# enabling mongod to start on boot, starts it
+# enables MongoDB to start on boot, starts it
 echo "Enabling MongoDB service..."
 sudo systemctl enable mongod
 
-# checking if mongod is enabled
+# checks if MongoDB is enabled
 echo "Checking if MongoDB service is enabled..."
 sudo systemctl is-enabled mongod
 
-# restarting mongodb to save new enabled setting
+# restarts MongoDB to save new enabled setting
 echo "Restarting MongoDB service..."
 sudo systemctl restart mongod
 
