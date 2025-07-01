@@ -9,5 +9,6 @@ terraform.tfstate.backup
 
 # excluding variables containing sensitive information
 variable.tf
+variables.tf
 
 Notes on Project 7.md
