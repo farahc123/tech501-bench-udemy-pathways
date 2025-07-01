@@ -6,7 +6,7 @@ provider "google" {
 
 terraform {
   backend "gcs" {
-    bucket = "sparta-app-terraform-state"
+    bucket = "sparta-terraform-state-bucket"
     prefix = "ansible-controller"
   }
 }
@@ -18,7 +18,7 @@ data "google_compute_image" "ubuntu" {
 
 resource "google_compute_firewall" "ansible_firewall" {
   name    = var.ansible_firewall_name
-  network = "default" 
+  network = "default"
 
   allow {
     protocol = "tcp"
@@ -42,8 +42,8 @@ resource "google_compute_instance" "ansible_controller" {
   }
 
   network_interface {
-    network       = "default"
-    access_config {}  # this allocates a public IP
+    network = "default"
+    access_config {} # this allocates a public IP
   }
 
   metadata_startup_script = file("/scripts/prov-ansible.sh")

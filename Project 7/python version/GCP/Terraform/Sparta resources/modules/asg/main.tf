@@ -49,6 +49,15 @@ resource "google_compute_instance_template" "app_template" {
 
   tags = ["app"]
 
+  metadata = {
+  startup-script = <<-EOT
+    #!/bin/bash
+    cat << 'EOF' > /home/fcheded/prov-app.py
+${file("${path.module}/../../scripts/python/prov-app.py")}
+EOF
+    python3 /home/fcheded/prov-app.py
+  EOT
+}
 }
 
 resource "google_compute_region_instance_group_manager" "app_mig" {

@@ -1,0 +1,7 @@
+[web]
+
+app_vm_1 ansible_host=35.233.85.9 ansible_user=fcheded ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/gcp_sparta_key
+app_vm_2 ansible_host=34.76.121.115 ansible_user=fcheded ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/gcp_sparta_key 
+
+[db]
+db_vm ansible_host=34.79.246.151 ansible_user=fcheded ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/gcp_sparta_key

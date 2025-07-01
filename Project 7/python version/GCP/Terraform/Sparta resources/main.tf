@@ -6,7 +6,7 @@ provider "google" {
 
 terraform {
   backend "gcs" {
-    bucket = "sparta-terraform-state-bucket"
+    bucket = "sparta-python-terraform-state-bucket"
     prefix = "sparta-app-resources"
   }
 }
