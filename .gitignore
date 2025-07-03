@@ -16,6 +16,9 @@ Powershell script for moving images to images folder
 
 Project 1 GitHub Actions
 
+values.yaml
+values.yml
+
 # Terraform
 
 # Local .terraform directories
