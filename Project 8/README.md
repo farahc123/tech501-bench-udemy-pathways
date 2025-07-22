@@ -1,6 +1,6 @@
-# **Project 8: Ansible**
+# **Project 8: Docker**
 
-- [**Project 8: Ansible**](#project-8-ansible)
+- [**Project 8: Docker**](#project-8-docker)
   - [Goal of the project](#goal-of-the-project)
   - [GitHub repo](#github-repo)
   - [Installing Docker Desktop](#installing-docker-desktop)
