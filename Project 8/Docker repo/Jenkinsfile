@@ -1,0 +1,147 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = 'my-dockerhub'
+        SSH_CREDENTIALS = 'targets'
+        GIT_CREDENTIALS = 'farah-github-key'
+        IMAGE_NAME = 'farahc123/devops-app'
+        TARGET_VM = '13.53.199.166'
+    }
+
+    tools {
+        nodejs '20'
+    }
+
+    stages {
+        stage('Checkout GitHub repo Dev branch') {
+            steps {
+                git branch: 'dev', credentialsId: env.GIT_CREDENTIALS, url: 'https://github.com/farahc123/own-test-app.git'
+            }
+        }
+
+        stage('Run tests with npm') {
+            steps {
+                dir('app') {
+                    sh '''
+                        set -e
+                        echo "Running tests"
+                        npm install
+                        npm test
+                    '''
+                }
+            }
+        }
+
+        stage("SonarQube code analysis") {
+            environment {
+                scannerHome = tool 'SONAR6.2'
+            }
+            steps {
+                withSonarQubeEnv('sonarserver') {
+                    sh """
+                      ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=test-app \
+                        -Dsonar.projectName=test-app \
+                        -Dsonar.projectVersion=1.0 \
+                        -Dsonar.sources=app/ \
+                        -Dsonar.language=js \
+                        -Dsonar.sourceEncoding=UTF-8 \
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+                    """
+                }
+            }
+        }
+
+        stage("SonarQube Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+        }
+    }
+
+        stage('Merge to GitHub repo Main branch if tests pass') {
+            steps {
+                sshagent([env.GIT_CREDENTIALS]) {
+                    sh '''
+                        set -e
+                        git config user.email "jenkins@example.com"
+                        git config user.name "Jenkins"
+                        git checkout main
+                        git pull origin main --rebase
+                        git merge dev --no-ff -m "Merged dev to main via Jenkins pipeline"
+                        git remote set-url origin git@github.com:farahc123/own-test-app.git
+                        git push origin main
+                    '''
+                }
+            }
+        }
+
+        stage('Build Docker image') {
+            steps {
+                script {
+                    env.IMAGE_TAG = "${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                }
+                sh '''
+                    set -e
+                    echo "Building image"
+                    docker build -t $IMAGE_TAG .
+                    echo "Image built"
+                '''
+            }
+        }
+
+        stage('Docker login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: env.DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        set -e
+                        echo "Logging into Docker Hub"
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                    '''
+                }
+            }
+        }
+
+        stage('Push Docker image to Docker Hub') {
+            steps {
+                sh '''
+                    set -e
+                    echo "Pushing image"
+                    docker push $IMAGE_TAG
+                    echo "Image pushed"
+                '''
+            }
+        }
+
+        stage('Deploy to existing Minikube cluster') {
+            steps {
+                sshagent([env.SSH_CREDENTIALS]) {
+                    script {
+                        def imageTag = env.IMAGE_TAG
+                        def targetVM = env.TARGET_VM
+                        sh(
+    '''ssh -o StrictHostKeyChecking=no ubuntu@''' + targetVM + ''' << EOF
+export KUBECONFIG=/home/ubuntu/.kube/config
+echo "Setting image in deployment..."
+kubectl set image deployment/devops-app-deployment devops-app=''' + imageTag + ''' --record
+echo "Deployment updated"
+EOF
+''')
+
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed."
+        }
+    }
+}
